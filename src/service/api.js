@@ -5,7 +5,7 @@ const parseJSON = function(response) {
 };
 
 const API = {
-  URL: "https://fda9190a.ngrok.io",
+  URL: "http://localhost:8000",
   Group: {
     get: function(groupId) {
       return fetch(`${API.URL}/group${groupId ? "/" + groupId : ""}`).then(parseJSON);
