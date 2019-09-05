@@ -12,7 +12,7 @@ class App extends React.Component {
         <Router>
           <Login path="/login" />
           <Layout path="/*" />
-        </Router>
+        </Router> 
       </React.Fragment>
     );
   }

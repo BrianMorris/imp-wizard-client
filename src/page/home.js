@@ -1,7 +1,7 @@
 import React from "react";
 import { Header, Segment, Dimmer, Loader } from "semantic-ui-react";
 import { navigate } from "@reach/router";
-import Groups from "../component/groups";
+import Group from "../component/group";
 import API from "../service/api";
 
 class Home extends React.Component {
@@ -12,6 +12,37 @@ class Home extends React.Component {
       isLoaded: false,
       groups: []
     };
+  }
+
+ componentDidMount() {
+    API.Group.get().then(
+      result => {
+        this.setState({
+          isLoaded: true,
+          groups: result
+        });
+      },
+      error => {
+        this.setState({
+          isLoaded: true,
+          error: error
+        });
+      }
+    );
+
+    // when fetching groups also check for completed imports to show a green label for import nav item
+    API.Import.get().then(
+      result => {
+        let activeImports = result.filter((item) => {
+          return item.ready_to_download;
+        });
+
+        if(activeImports && activeImports.length) {
+          this.completeImport();
+        }
+      }
+    );
+
   }
 
   routeToQuestion(groupId) {
@@ -29,41 +60,29 @@ class Home extends React.Component {
     );
   }
 
-  componentDidMount() {
-    API.Group.get().then(
-      result => {
-        this.setState({
-          isLoaded: true,
-          groups: result
-        });
-      },
-      error => {
-        this.setState({
-          isLoaded: true,
-          error: error
-        });
-      }
-    );
+  completeImport() {
+    this.props.completeImport();
   }
 
   render() {
+    const groupElement = this.state.isLoaded 
+    ? 
+      (<Segment.Group>
+        {this.state.groups.map((group, index) => {
+          return <Group group={group} key={index} onGroupSelect={() => this.routeToQuestion(group.id)} />
+        })}
+      </Segment.Group>)
+    :
+      (<Segment style={{ minHeight: 200 }}>
+        <Dimmer active inverted>
+          <Loader inverted />
+        </Dimmer>
+      </Segment>);
+
     return (
       <React.Fragment>
         <Header>Select a category below:</Header>
-        {this.state.isLoaded ? (
-          <Groups
-            groups={this.state.groups}
-            onGroupSelect={group => {
-              this.routeToQuestion(group.id);
-            }}
-          />
-        ) : (
-          <Segment style={{ minHeight: 200 }}>
-            <Dimmer active inverted>
-              <Loader inverted />
-            </Dimmer>
-          </Segment>
-        )}
+          {groupElement}
       </React.Fragment>
     );
   }
