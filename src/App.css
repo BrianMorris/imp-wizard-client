@@ -1,33 +1,19 @@
-.App {
-  text-align: center;
+body {
+  background-image: url(https://vignette.wikia.nocookie.net/d4nk/images/9/94/Jake.JPG/revision/latest/scale-to-width-down/1000?cb=20180504042054) !important;
+  background-size: 40vh;
+  background-repeat: no-repeat;
+  background-position: bottom right;
 }
 
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 40vmin;
-  pointer-events: none;
+.ui.secondary.pointing.menu a.item:hover {
+  background:rgba(0,0,0,.05);
+  color:rgba(0,0,0,.95);
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.categoryButton {
+  /* min-width:20vw; */
 }
 
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+#rail {
+  top:100%;
 }
