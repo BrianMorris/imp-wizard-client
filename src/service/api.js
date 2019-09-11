@@ -15,8 +15,11 @@ const API = {
     }
   },
   Question: {
-    get: function(questionId) {
-      return fetch(`${API.URL}/question${questionId ? "/" + questionId : ""}`).then(parseJSON);
+    get: function(data) {
+      let questionId = data && data.hasOwnProperty('question_id') && data.question_id; 
+      let filter = data && data.hasOwnProperty('filter') && data.filter;
+
+      return fetch(`${API.URL}/question${questionId ? "/" + questionId : ""}${filter ? "?filter=" + filter:""}`).then(parseJSON);
     },
     postAnswer: function(questionId, answerId) {
       return fetch(`${API.URL}/question/${questionId}/answer`, {

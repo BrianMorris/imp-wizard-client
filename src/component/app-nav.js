@@ -19,7 +19,6 @@ class AppNav extends React.Component {
   }
   render() {
     // adding a import label to notify user when there are valid imports available for download
-    const importLabel = this.state.activeImports ? <Label id="import-label" circular color="green" empty key="green" /> : null;
 
     return (
       <Menu pointing secondary>
@@ -31,24 +30,31 @@ class AppNav extends React.Component {
         >
           Home
         </Menu.Item>
+
         <Menu.Item
           onClick={() => {
-            // API.Question.resetAll().then(function() {
-              alert("SUCCESS!");
-            // });
+              navigate("/importfields");
           }}
         >
-          Reset All
+            Import fields
         </Menu.Item>
 
         <Menu.Item
           onClick={() => {
-              navigate("/import");
+              navigate("/imports");
           }}
         >
-            Import
-            {importLabel}
+            Imports
         </Menu.Item>
+        
+        <Menu.Item
+          onClick={() => {
+              navigate("/support");
+          }}
+        >
+          Support
+        </Menu.Item>
+
 
         <Menu.Item
           name="logout"

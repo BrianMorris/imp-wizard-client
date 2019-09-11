@@ -2,7 +2,6 @@ import React from "react";
 import { Icon, Header, List } from "semantic-ui-react";
 
 function Question(props) {
-  console.log('single qu', props)
   return (
     <List>
       <List.Item>
@@ -12,9 +11,11 @@ function Question(props) {
         </Header>
       </List.Item>
       <List.Item>Description: {props.question.description}</List.Item>
+      {props.hide_group ? null : (
       <List.Item>
         Group: {props.question.group.name}
       </List.Item>
+      )}
     </List>
   );
 }

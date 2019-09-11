@@ -1,6 +1,6 @@
 import React from "react";
 import Question from "./question";
-import { Header, Grid, Segment, Loader, Dimmer } from "semantic-ui-react";
+import {Form, Header, Segment, Loader, Dimmer } from "semantic-ui-react";
 import { navigate } from "@reach/router";
 import API from "../service/api";
 
@@ -9,24 +9,25 @@ class Questions extends React.Component {
     super(props);
     this.state = {
       isLoaded: false,
-      questions: null
+      questions: null,
+      filter:null
     };
   }
   
   componentDidMount() {
     this.loadQuestions();
+    this.timer = null;
   }
   
   componentDidUpdate(prevProp) {
-    console.log('some p', this.props);
     if (this.props.questionId !== prevProp.questionId) {
       this.loadQuestions();
     }
   }
 
-  loadQuestions() {
+  loadQuestions(data) {
     this.setState({ isLoaded: false });
-    API.Question.get().then(
+    API.Question.get(data).then(
       result => {
         this.setState({
           questions: result,
@@ -47,25 +48,67 @@ class Questions extends React.Component {
     navigate("/questionmanager/1");
   }
 
-  render() {
+  handleChange = (e) => {
+    // handle input filter delay
+    clearTimeout(this.timer);
+
+    const {name, value} = e.target;
+    this.setState({
+      [name]:value
+    }, (e) => {this.timer = setTimeout(() => {
+      this.loadQuestions({'filter' : this.state.filter})
+      }, 300)
+  });
+    
+  }
+
+  handleSubmit = (e) => {
+    const data = {
+      "filter": this.state.searchText
+    }
+    this.loadQuestions(data);
+  }
+
+  composeQuestionComponent() {
     let questions = null;
     if(this.state.questions) {
+      let group = null;
+      let parent_count = 0;
+
       questions = this.state.questions.map((q) => {
+        console.log('question', q);
+        q.parent_answer_id ? parent_count++ : parent_count = 0; 
+        console.log('p_id', parent_count);
+
+        let groupHeader = null;
+        if(group !== q.group.name) {
+          group = q.group.name
+          groupHeader = <Segment inverted><Header size="small">{q.group.name}</Header></Segment>
+        }
         return (
-          <Segment style={{ minHeight: 125 }} onClick={(e) => this.editQuestion(e)} >
-            <Question question={q} />
-          </Segment>
+          <React.Fragment>
+            {groupHeader}
+            <Segment style={{"margin-left": parent_count * 50}} onClick={(e) => this.editQuestion(e)} >
+              <Question question={q} hide_group={true}/>
+            </Segment>
+          </React.Fragment>
           );
         });
-        console.log('more', questions);
-        console.log('cur questions', this.state.questions);
     }
+    return questions;
+  }
+
+  render() {
+    // conditional rendering
+    const questions = this.composeQuestionComponent();
 
     return (
       <React.Fragment>
         <Header textAlign="center">Questions</Header>
-        {/* <Grid textAlign="center" verticalAlign="top"> */}
-          {/* <Grid.Column style={{ maxWidth: 600 }}> */}
+        <Form>
+          <Form.Input name="filter" icon='search'  placeholder='Search...' value={this.state.search} onChange={this.handleChange} />
+        </Form>
+
               {this.state.isLoaded  ? (
                 questions
               ) : (
@@ -75,8 +118,6 @@ class Questions extends React.Component {
                   </Dimmer>
                 </Segment>
               )}
-          {/* </Grid.Column> */}
-        {/* </Grid> */}
       </React.Fragment>
     );
   }
