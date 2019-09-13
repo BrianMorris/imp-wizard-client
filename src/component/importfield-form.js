@@ -1,15 +1,9 @@
 import React from "react";
 import { List, Header, Segment, Button } from "semantic-ui-react";
 
-class Importfields extends React.Component {
-
-  handleClick = e => {
-    console.log('click');
-    e.stopPropagation();
-  }
+class ImportfieldForm extends React.Component {
 
   render() {
-    console.log('mprops', this.props);
     let importfields = <List.Item><List.Content>No linked import fields</List.Content></List.Item>;
 
     if(this.props.arrImportfields) {
@@ -30,9 +24,9 @@ class Importfields extends React.Component {
     }
 
     return(
-      <Segment onClick={this.handleClick}>
+      <Segment onClick={(e) => e.stopPropagation()}>
         <Header>
-          Linked Import Fields:
+          Form
         </Header>
         <List horizontal>
           {importfields}
@@ -42,4 +36,4 @@ class Importfields extends React.Component {
   }
 }
 
-export default Importfields ;
+export default ImportfieldForm;

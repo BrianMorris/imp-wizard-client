@@ -16,17 +16,20 @@ const API = {
   },
   Question: {
     get: function(data) {
-      let questionId = data && data.hasOwnProperty('question_id') && data.question_id; 
+      let question_id = data && data.hasOwnProperty('question_id') && data.question_id; 
       let filter = data && data.hasOwnProperty('filter') && data.filter;
 
-      return fetch(`${API.URL}/question${questionId ? "/" + questionId : ""}${filter ? "?filter=" + filter:""}`).then(parseJSON);
+      return fetch(`${API.URL}/question${question_id ? "/" + question_id : ""}${filter ? "?filter=" + filter:""}`).then(parseJSON);
     },
-    postAnswer: function(questionId, answerId) {
-      return fetch(`${API.URL}/question/${questionId}/answer`, {
+    getDetail: function(question_id) {
+      return fetch(`${API.URL}/question/${question_id}/detail`).then(parseJSON);
+    },
+    postAnswer: function(question_id, answer_id) {
+      return fetch(`${API.URL}/question/${question_id}/answer`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          answer_id: answerId
+          answer_id: answer_id
         })
       }).then(parseJSON);
     },
@@ -35,14 +38,14 @@ const API = {
     }
   },
   Import: {
-    get: function(importId) {
-      return fetch(`${API.URL}/import${importId ? "/" + importId : ""}`).then(parseJSON);
+    get: function(import_id) {
+      return fetch(`${API.URL}/import${import_id ? "/" + import_id : ""}`).then(parseJSON);
     },
-    activeFields: function(importId) {
-      return fetch(`${API.URL}/import/${importId}/activefields`).then(parseJSON);
+    activeFields: function(import_id) {
+      return fetch(`${API.URL}/import/${import_id}/activefields`).then(parseJSON);
     },
-    downloadTemplate: function(importId) {
-      return fetch(`${API.URL}/import/${importId}/template`).then(parseJSON);
+    downloadTemplate: function(import_id) {
+      return fetch(`${API.URL}/import/${import_id}/template`).then(parseJSON);
     }
   
   },

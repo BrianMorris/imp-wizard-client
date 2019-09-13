@@ -55,7 +55,6 @@ class AppNav extends React.Component {
           Support
         </Menu.Item>
 
-
         <Menu.Item
           name="logout"
           position="right"

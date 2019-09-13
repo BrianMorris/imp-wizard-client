@@ -1,7 +1,7 @@
 import React from "react";
 import {Form, Button, Header } from "semantic-ui-react";
 
-class QuestionDetail extends React.Component {
+class QuestionForm extends React.Component {
   render() {
     let parentButton = null;
     if(this.props.has_parent) {
@@ -46,4 +46,4 @@ class QuestionDetail extends React.Component {
   }
 }
 
-export default QuestionDetail;
+export default QuestionForm ;

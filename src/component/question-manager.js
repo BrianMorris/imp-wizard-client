@@ -1,76 +1,51 @@
 import React from "react";
-import {Label, Rail, Segment, Header } from "semantic-ui-react";
+import { Loader, Dimmer, Button, Label, Rail, Segment, Header } from "semantic-ui-react";
 import Question from "./question";
-import QuestionDetail from "./question-detail";
+import QuestionForm from "./question-form";
 import Answer from "./answer";
+import AnswerForm from "./answer-form";
 import * as Constants from "../helpers/constants";
+import API from "../service/api";
+import Importfield from "./importfield";
+import ImportfieldForm from "./importfield-form";
 
 class QuestionManager extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      focus_id: null 
+      isLoaded:false,
+      focus_constant: null,
+      focus_id:null, 
+      questionDetails: {}
     }
-
+    
     this.getAnswerImportfields.bind(this);
-    this.getQuestion.bind(this);
+    this.getQuestionDetails.bind(this);
     this.changeFocus.bind(this);
   }
-  
-  getQuestion() {
-    const question = {
-      "id": 1,
-      "name": "Do you want to import parts?",
-      "description": "Manages part related import.",
-      "parent_answer_id": null,
-      "group_id": 1,
-      "multiple": 0,
-      "sort_order": 1,
-      "active": 1,
-      "created_at": "2019-09-04 20:05:59",
-      "updated_at": "2019-09-04 20:05:59",
-      "has_children": 1,
-      "answers": [
-        {
-          "id": 1,
-          "question_id": 1,
-          "sort_order": 1,
-          "name": "Yes",
-          "description": null,
-          "created_at": "2019-09-04 20:05:59",
-          "updated_at": "2019-09-04 20:05:59",
-          "implementation_answers": [
-            {
-            "id": 24,
-            "implementation_id": 1,
-            "answer_id": 1
-            }
-          ]
-        },
-        {
-        "id": 2,
-        "question_id": 1,
-        "sort_order": 2,
-        "name": "No",
-        "description": null,
-        "created_at": "2019-09-04 20:05:59", "updated_at": "2019-09-04 20:05:59",
-        "implementation_answers": []
-        }
-      ],
-      "group": {
-        "id": 2,
-        "name": "Customers",
-        "description": "Group for all customer related questions",
-        "active": 1
-      }
-    }
 
-    return question;
+  componentDidMount() {
+    this.getQuestionDetails(this.props.id);
+  }
+  
+  getQuestionDetails(question_id) {
+    API.Question.getDetail(question_id).then(
+      result => {
+        this.setState({
+          isLoaded: true,
+          questionDetails: result
+        });
+      },
+      error => {
+        this.setState({
+          isLoaded: true
+        });
+      }
+    );
   }
 
   getAnswerImportfields(id) {
-    console.log('anser id', id);
     let answer = null; 
     if(id === 1) {
       answer = {
@@ -113,45 +88,85 @@ class QuestionManager extends React.Component {
     return answer;
   }
 
-  changeFocus(id) {
-    console.log('changing focus', id);
-    if(this.state.focus_id !== id) {
-      console.log('calling cahnge', id);
+  changeFocus(item_constant, item_id) {
+    // added extra field to correctly show multiple answer and importfield detail
+    if(this.state.focus_constant !== item_constant || this.state.focus_id !== item_id) {
+      console.log('setting sate');
       this.setState({
-        focus_id : id
+        focus_constant : item_constant,
+        focus_id : item_id
       })
     }
   }
 
   render() {
+    console.log('deats', this.state.questionDetails);
+    let answers = [];
+    let group = null;
 
-    const question = this.getQuestion(this.props.id);
-    let arrAnswers = question.answers;
+    if(this.state.questionDetails.answers) {
+      console.log('here');
+      answers = this.state.questionDetails.answers;
+    }
+    // const arrAnswers = question.answers;
     
-    let answers = arrAnswers.map((answer) => {
+    const questionSegment = (
+      <Segment onClick={() => this.changeFocus(Constants.QUESTION)}>
+        <Header>Question:</Header>
+        {this.state.focus_constant === Constants.QUESTION ? <QuestionForm question={this.state.questionDetails} /> : <Question question={this.state.questionDetails} />}
+      </Segment>
+    );
+    
+    const answerSegments = answers.map((answer) => {
+      const answerimportfields = answer.answerimportfields;
+      const importfieldSegment = (this.state.focus_constant === Constants.IMPORTFIELD && this.state.focus_id === answer.id) ?
+      <ImportfieldForm />
+      : 
+      <Importfield  handleClick={(x,i) => this.changeFocus(x,i)}
+        answerimportfields={answerimportfields}
+        answer_id={answer.id}
+      />
+
       return (
-        <Segment onClick={() => this.changeFocus(Constants.ANSWER)}>
+        <Segment onClick={() => this.changeFocus(Constants.ANSWER, answer.id)}>
           <Header>Answer:</Header>
-          {this.state.focus_id === Constants.ANSWER ? <p>Answer Detail</p> : null}
-          <Answer handleClick={(e) => this.ChangeFocus(e)} answer={answer} getAnswerImportfields={() => this.getAnswerImportfields(answer.id)} />
+          <Button floated="right">Hi</Button>
+          {this.state.focus_constant === Constants.ANSWER && this.state.focus_id === answer.id ? 
+          <AnswerForm 
+            key={answer.id} 
+            answer={answer} 
+          >
+            {importfieldSegment}
+          </AnswerForm>
+          :
+          <Answer 
+            key={answer.id} 
+            answer={answer} 
+          >
+            {importfieldSegment}
+          </Answer>
+          }
         </Segment>
       )
     });
 
     return (
       <React.Fragment>
-        <Rail id="rail" position='lower right'>
+        <Rail id="rail" position='right'>
           <Segment><Label color='blue'>!</Label> Click on a Module to expand</Segment>
         </Rail>
-        <Segment onClick={() => this.changeFocus(Constants.QUESTION)}>
-          <Header>Question:</Header>
-          {this.state.focus_id === Constants.QUESTION ? <QuestionDetail question={question} /> : <Question question={question} />}
-        </Segment>
-        {answers}
-        {/* <Segment onClick={() => this.changeFocus(IMPORTFIELD)}>
-        <Header>Links</Header>
-        {this.state.focus_id === IMPORTFIELD ? <p>Links Detail </p> : null}
-        </Segment> */}
+
+        {this.state.isLoaded ? (
+        questionSegment
+        ):
+        <Segment style={{ minHeight: 125 }}>
+            <Dimmer active inverted>
+              <Loader inverted />
+            </Dimmer>
+          </Segment>
+
+      }
+      {answerSegments}
       </React.Fragment>
     );
   }
