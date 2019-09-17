@@ -17,3 +17,19 @@ body {
 #rail {
   top:100%;
 }
+
+button > i.cancelIcon {
+   margin-right: -.81428571em !important;
+}
+
+.segment, .cancelIcon {
+  cursor: pointer;
+}
+
+.ui.horizontal.list>.item {
+  margin-left:0;
+}
+
+.noClick, button.ui.noClick {
+  cursor: text
+}

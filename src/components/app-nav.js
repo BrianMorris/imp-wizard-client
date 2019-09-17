@@ -1,5 +1,5 @@
 import React from "react";
-import { Menu, Label } from "semantic-ui-react";
+import { Menu} from "semantic-ui-react";
 import { navigate } from "@reach/router";
 // import API from "../service/api";
 

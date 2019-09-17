@@ -1,9 +1,7 @@
 import React from "react";
-import { Button, Form, Header } from "semantic-ui-react";
-import Importfields from "./importfield";
+import { Button, Form } from "semantic-ui-react";
 
 export default (props) => {
-  console.log('pop', props);
     const buttonText = 'Link answer to Question';
     return(
       <React.Fragment>

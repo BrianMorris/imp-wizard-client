@@ -1,16 +1,23 @@
 import React from "react";
 import { List, Header, Segment, Button } from "semantic-ui-react";
+import * as Constants from "../../helpers/constants";
 
-class ImportfieldForm extends React.Component {
+class Importfield extends React.Component {
+
+  handleClick = (e) => {
+    e.stopPropagation();
+    const item_id = this.props.answer_id;
+    this.props.handleClick(Constants.IMPORTFIELD, item_id);
+  }
 
   render() {
     let importfields = <List.Item><List.Content>No linked import fields</List.Content></List.Item>;
 
-    if(this.props.arrImportfields) {
-      let arrImportfields = this.props.arrImportfields.answerimportfields;
-      importfields = arrImportfields.map((field) => {
+    if(this.props.answerimportfields) {
+      // let answerimportfields = this.props.answerimportfields.answerimportfields;
+      importfields = this.props.answerimportfields.map((field) => {
           return (
-            <List.Item>
+            <List.Item key={field.id}>
               <List.Content>
                 <Button secondary compact size='small'>{field.importfield.name}</Button>
               </List.Content>
@@ -24,9 +31,11 @@ class ImportfieldForm extends React.Component {
     }
 
     return(
-      <Segment onClick={(e) => e.stopPropagation()}>
+      <Segment onClick={(e) => {
+        this.handleClick(e);
+        }}>
         <Header>
-          Form
+          Linked Import Fields:
         </Header>
         <List horizontal>
           {importfields}
@@ -36,4 +45,4 @@ class ImportfieldForm extends React.Component {
   }
 }
 
-export default ImportfieldForm;
+export default Importfield;

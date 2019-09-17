@@ -2,12 +2,12 @@ import React from "react";
 import { Loader, Dimmer, Button, Label, Rail, Segment, Header } from "semantic-ui-react";
 import Question from "./question";
 import QuestionForm from "./question-form";
-import Answer from "./answer";
-import AnswerForm from "./answer-form";
-import * as Constants from "../helpers/constants";
-import API from "../service/api";
-import Importfield from "./importfield";
-import ImportfieldForm from "./importfield-form";
+import Answer from "../answer/answer";
+import AnswerForm from "../answer/answer-form";
+import * as Constants from "../../helpers/constants";
+import API from "../../service/api";
+import Importfield from "../importfield/importfield";
+import ImportfieldForm from "../importfield/importfield-form";
 
 class QuestionManager extends React.Component {
 
@@ -20,7 +20,6 @@ class QuestionManager extends React.Component {
       questionDetails: {}
     }
     
-    this.getAnswerImportfields.bind(this);
     this.getQuestionDetails.bind(this);
     this.changeFocus.bind(this);
   }
@@ -41,57 +40,11 @@ class QuestionManager extends React.Component {
         this.setState({
           isLoaded: true
         });
-      }
-    );
-  }
-
-  getAnswerImportfields(id) {
-    let answer = null; 
-    if(id === 1) {
-      answer = {
-        "id": 3,
-        "question_id": 2,
-        "sort_order": 1,
-        "name": "Yes",
-        "description": null,
-        "created_at": "2019-09-04 20:05:59",
-        "updated_at": "2019-09-04 20:05:59",
-        "answerimportfields": [
-          {
-            "id": 2,
-            "answer_id": 3,
-            "importfield_id": 15,
-            "importfield": {
-              "id": 15,
-              "importtype_id": 3,
-              "name": "Weight",
-              "description": null,
-              "default_field": 0
-            }
-          },
-          {
-            "id": 3,
-            "answer_id": 3,
-            "importfield_id": 11,
-            "importfield": {
-              "id": 11,
-              "importtype_id": 3,
-              "name": "Weight UOM",
-              "description": null,
-              "default_field": 0
-            }
-          }
-        ]
-      };
-    }
-
-    return answer;
-  }
-
+      }); }
+  
   changeFocus(item_constant, item_id) {
     // added extra field to correctly show multiple answer and importfield detail
     if(this.state.focus_constant !== item_constant || this.state.focus_id !== item_id) {
-      console.log('setting sate');
       this.setState({
         focus_constant : item_constant,
         focus_id : item_id
@@ -99,13 +52,43 @@ class QuestionManager extends React.Component {
     }
   }
 
+  handleInputfieldUnlink(answer_id, importfield_id, answerIndex) {
+    API.Importfield.unlinkImportfield(answer_id, importfield_id).then(
+      result => {
+        // rerender my answer import fields using state. 
+        this.renderAnswerImportfields(importfield_id, answerIndex);
+      },
+      error => {
+        console.log('err', error);
+      }
+    );
+  }
+
+  handleImportfieldLink = (answer_id, importfield_id) => {
+    // post field and rerender
+    API.Importfield.linkImportfield(answer_id, importfield_id).then(
+      result => {
+        this.getQuestionDetails(this.props.id);
+      },
+      error => {
+        console.log('er', error);
+      }
+    )
+     }
+
+  renderAnswerImportfields(importfield_id, answerIndex) {
+        const questionDetails = {...this.state.questionDetails};
+        const newImportfields = questionDetails.answers[answerIndex].answerimportfields.filter((answerimportfield) => answerimportfield.importfield_id !== importfield_id);
+        questionDetails.answers[answerIndex].answerimportfields = newImportfields;
+        this.setState({
+          questionDetails: questionDetails
+        });
+  }
+
   render() {
-    console.log('deats', this.state.questionDetails);
     let answers = [];
-    let group = null;
 
     if(this.state.questionDetails.answers) {
-      console.log('here');
       answers = this.state.questionDetails.answers;
     }
     // const arrAnswers = question.answers;
@@ -117,34 +100,38 @@ class QuestionManager extends React.Component {
       </Segment>
     );
     
-    const answerSegments = answers.map((answer) => {
+    const answerSegments = answers.map((answer, index) => {
       const answerimportfields = answer.answerimportfields;
       const importfieldSegment = (this.state.focus_constant === Constants.IMPORTFIELD && this.state.focus_id === answer.id) ?
-      <ImportfieldForm />
-      : 
-      <Importfield  handleClick={(x,i) => this.changeFocus(x,i)}
-        answerimportfields={answerimportfields}
-        answer_id={answer.id}
-      />
+        <ImportfieldForm 
+          answerimportfields={answerimportfields}
+          handleImportfieldUnlink={(importfield_id) => this.handleInputfieldUnlink(answer.id, importfield_id, index)}
+          handleImportfieldLink={(importfield_id) => this.handleImportfieldLink(answer.id, importfield_id)}
+        />
+      :
+        <Importfield  handleClick={(x,i) => this.changeFocus(x,i)}
+          answerimportfields={answerimportfields}
+          answer_id={answer.id}
+        />
+      ;
 
       return (
-        <Segment onClick={() => this.changeFocus(Constants.ANSWER, answer.id)}>
+        <Segment key={answer.id} onClick={() => this.changeFocus(Constants.ANSWER, answer.id)}>
           <Header>Answer:</Header>
           <Button floated="right">Hi</Button>
           {this.state.focus_constant === Constants.ANSWER && this.state.focus_id === answer.id ? 
-          <AnswerForm 
-            key={answer.id} 
-            answer={answer} 
-          >
+            <AnswerForm 
+              answer={answer} 
+            >
+              {importfieldSegment}
+            </AnswerForm>
+            :
+            <Answer 
+              key={answer.id} 
+              answer={answer} 
+            >
             {importfieldSegment}
-          </AnswerForm>
-          :
-          <Answer 
-            key={answer.id} 
-            answer={answer} 
-          >
-            {importfieldSegment}
-          </Answer>
+            </Answer>
           }
         </Segment>
       )

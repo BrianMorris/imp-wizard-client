@@ -10,6 +10,11 @@
     "semantic-ui-css": "^2.4.1",
     "semantic-ui-react": "^0.87.3"
   },
+  "devDependencies": {
+    "enzyme": "^3.10.0",
+    "enzyme-adapter-react-16": "^1.14.0",
+    "react-test-renderer": "^16.9.0"
+  },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",

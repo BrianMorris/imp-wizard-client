@@ -2,7 +2,7 @@ import React from "react";
 import Question from "./question";
 import {Form, Header, Segment, Loader, Dimmer } from "semantic-ui-react";
 import { navigate } from "@reach/router";
-import API from "../service/api";
+import API from "../../service/api";
 
 class Questions extends React.Component {
   constructor(props) {
@@ -44,7 +44,6 @@ class Questions extends React.Component {
   }
 
   editQuestion(e) {
-    console.log('ev', e);
     navigate("/questionmanager/1");
   }
 
@@ -75,21 +74,19 @@ class Questions extends React.Component {
       let group = null;
       let parent_count = 0;
 
-      questions = this.state.questions.map((q) => {
-        console.log('question', q);
-        q.parent_answer_id ? parent_count++ : parent_count = 0; 
-        console.log('p_id', parent_count);
+      questions = this.state.questions.map((question) => {
+        question.parent_answer_id ? parent_count++ : parent_count = 0; 
 
         let groupHeader = null;
-        if(group !== q.group.name) {
-          group = q.group.name
-          groupHeader = <Segment inverted><Header size="small">{q.group.name}</Header></Segment>
+        if(group !== question.group.name) {
+          group = question.group.name;
+          groupHeader = <Segment inverted><Header size="small">{question.group.name}</Header></Segment>;
         }
         return (
-          <React.Fragment>
+          <React.Fragment key={question.id}>
             {groupHeader}
-            <Segment style={{"margin-left": parent_count * 50}} onClick={(e) => this.editQuestion(e)} >
-              <Question question={q} hide_group={true}/>
+            <Segment style={{"marginLeft": parent_count * 50}} onClick={(e) => this.editQuestion(e)} >
+              <Question  question={question} hide_group={true}/>
             </Segment>
           </React.Fragment>
           );

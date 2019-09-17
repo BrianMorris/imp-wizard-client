@@ -7,7 +7,7 @@ class Home extends React.Component {
   render() {
     const categories = adminCategories.map((item) => {
       return (
-        <Segment>
+        <Segment key={item.id}>
           <Item>
             <Item.Content>
               <Button className="categoryButton" primary onClick={() => navigate("./" + item.route)}> {item.title} </Button>
