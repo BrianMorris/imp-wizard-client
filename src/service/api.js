@@ -35,6 +35,16 @@ const API = {
     },
     resetAll: function() {
       return fetch(`${API.URL}/question/reset`).then(parseJSON);
+    },
+    updateQuestion: function({question_id, group_id, name, description, sort_order}) {
+      return fetch(`${API.URL}/question/${question_id}`, {
+        method: "PUT", 
+        headers: {
+          "Content-Type": "application/json", 
+          "Accept":"application/json"
+        },
+        body: JSON.stringify({name, group_id, description, sort_order})
+      }).then(parseJSON);
     }
   },
   Import: {
@@ -73,6 +83,23 @@ const API = {
     },
     getDropdownImportfields: function(importtype_id) {
       return fetch(`${API.URL}/importfield?importtype_id=${importtype_id}`).then(parseJSON);
+    }
+  },
+  Answer: {
+    updateAnswer: function({answer_id, name, description, sort_order}) {
+      console.log('calling update', answer_id, name, description, sort_order);
+      return fetch(`${API.URL}/answer/${answer_id}`, {
+        method: "PUT", 
+        headers: {
+          "Content-Type": "application/json", 
+          "Accept":"application/json"
+        },
+        body: JSON.stringify({
+          name: name,
+          description: description,
+          sort_order:sort_order
+        })
+      }).then(parseJSON);
     }
   },
   Status: {

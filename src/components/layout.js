@@ -16,7 +16,7 @@ class Layout extends React.Component {
       <React.Fragment>
         <AppNav />
         <Grid centered columns={3}>
-          <Grid.Column width={8}>
+          <Grid.Column width={12}>
               <Router>
                 <Home path="/" name="home" />
                 <Questions path="questions" name="questions" />

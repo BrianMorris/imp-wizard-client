@@ -12,7 +12,7 @@ import ImportfieldForm from "../importfield/importfield-form";
 class QuestionManager extends React.Component {
 
   constructor(props) {
-    super(props);
+    super(props); 
     this.state = {
       isLoaded:false,
       focus_constant: null,
@@ -52,7 +52,7 @@ class QuestionManager extends React.Component {
     }
   }
 
-  handleInputfieldUnlink(answer_id, importfield_id, answerIndex) {
+  handleImportfieldUnlink(answer_id, importfield_id, answerIndex) {
     API.Importfield.unlinkImportfield(answer_id, importfield_id).then(
       result => {
         // rerender my answer import fields using state. 
@@ -74,7 +74,12 @@ class QuestionManager extends React.Component {
         console.log('er', error);
       }
     )
-     }
+  }
+
+  resetAfterSubmision = () => {
+    this.getQuestionDetails(this.props.id);
+    this.changeFocus(null, null);
+  }
 
   renderAnswerImportfields(importfield_id, answerIndex) {
         const questionDetails = {...this.state.questionDetails};
@@ -96,7 +101,15 @@ class QuestionManager extends React.Component {
     const questionSegment = (
       <Segment onClick={() => this.changeFocus(Constants.QUESTION)}>
         <Header>Question:</Header>
-        {this.state.focus_constant === Constants.QUESTION ? <QuestionForm question={this.state.questionDetails} /> : <Question question={this.state.questionDetails} />}
+        {this.state.focus_constant === Constants.QUESTION ?
+          <QuestionForm 
+              question={this.state.questionDetails}
+              reset={this.resetAfterSubmision}
+          /> :
+          <Question 
+            question={this.state.questionDetails} 
+          />
+        }
       </Segment>
     );
     
@@ -105,11 +118,11 @@ class QuestionManager extends React.Component {
       const importfieldSegment = (this.state.focus_constant === Constants.IMPORTFIELD && this.state.focus_id === answer.id) ?
         <ImportfieldForm 
           answerimportfields={answerimportfields}
-          handleImportfieldUnlink={(importfield_id) => this.handleInputfieldUnlink(answer.id, importfield_id, index)}
+          handleImportfieldUnlink={(importfield_id) => this.handleImportfieldUnlink(answer.id, importfield_id, index)}
           handleImportfieldLink={(importfield_id) => this.handleImportfieldLink(answer.id, importfield_id)}
         />
       :
-        <Importfield  handleClick={(x,i) => this.changeFocus(x,i)}
+        <Importfield  handleClick={(item_constant, item_id) => this.changeFocus(item_constant, item_id)}
           answerimportfields={answerimportfields}
           answer_id={answer.id}
         />
@@ -122,6 +135,7 @@ class QuestionManager extends React.Component {
           {this.state.focus_constant === Constants.ANSWER && this.state.focus_id === answer.id ? 
             <AnswerForm 
               answer={answer} 
+              reset={this.resetAfterSubmision}
             >
               {importfieldSegment}
             </AnswerForm>

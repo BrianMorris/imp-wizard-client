@@ -8,12 +8,12 @@ class ImportfieldForm extends React.Component {
 
     this.state = {
       importDropdownOptions: [],
-      importtypeValue: null,
+      importtype: null,
       importfieldDropdownOptions: [],
-      importfieldValue: null
+      importfield: null
     };
-
   }
+
   componentDidMount() {
     API.Importfield.getDropdownImporttypes().then(
       result => {
@@ -38,7 +38,7 @@ class ImportfieldForm extends React.Component {
 
   populateImporttypeDropdown = (e, data) => {
     this.setState({
-      importtypeValue: data.value
+      importtype: data.value
     });
 
     this.populateImportfieldDropdown(data.value);
@@ -66,17 +66,17 @@ class ImportfieldForm extends React.Component {
 
   handleLinkingImportfield = () => {
     // call props function, then reset forms
-    this.props.handleImportfieldLink(this.state.importfieldValue); 
+    this.props.handleImportfieldLink(this.state.importfield); 
 
     this.setState({
-      importtypeValue: null,
-      importfieldValue: null
+      importtype: null,
+      importfield: null
     })
   }
 
   handleImportfieldChange = (e, data) => {
       this.setState({
-        importfieldValue:data.value
+        importfield:data.value
       })
   }
 
@@ -100,10 +100,10 @@ class ImportfieldForm extends React.Component {
       });
     }
 
-    const importButton = <Button disabled={!(this.state.importtypeValue && this.state.importfieldValue)}
+    const importButton = <Button disabled={!(this.state.importtype && this.state.importfield)}
     onClick={this.handleLinkingImportfield}>Add new field</Button>;
 
-    // const defaultDropdown = this.props ? this.props.importtypeValue : null;
+    // const defaultDropdown = this.props ? this.props.importtype : null;
 
     return(
       <Segment className='noClick' onClick={(e) => e.stopPropagation()}>
@@ -122,7 +122,7 @@ class ImportfieldForm extends React.Component {
                 search={true}
                 onChange={this.populateImporttypeDropdown} 
                 selection 
-                value={this.state.importtypeValue}
+                value={this.state.importtype}
                 // defaultValue={defaultDropdown}
                 options={this.state.importDropdownOptions} />
             </Form.Field>
@@ -133,7 +133,7 @@ class ImportfieldForm extends React.Component {
                 fluid 
                 search 
                 selection 
-                value={this.state.importfieldValue}
+                value={this.state.importfield}
                 options={this.state.importfieldDropdownOptions} />
             </Form.Field>
             <Form.Field>
