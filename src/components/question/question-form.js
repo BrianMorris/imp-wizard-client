@@ -34,7 +34,6 @@ class QuestionForm extends React.Component {
   componentDidMount() {
     API.Group.get().then(
       result => {
-        console.log('roup', result);
         this.mapGroupOptions(result);
       },
       error => {
@@ -58,7 +57,6 @@ class QuestionForm extends React.Component {
   }
 
  handleSubmit = (e) => {
-   console.log('submiting', this.props);
     API.Question.updateQuestion({
       question_id: this.props.question.id,
       group_id: this.state.group_id,
@@ -67,7 +65,6 @@ class QuestionForm extends React.Component {
       sort_order: this.state.sort_order
     }).then(
       result => {
-        console.log('result get', result);
         this.props.reset();
       },
       error => {

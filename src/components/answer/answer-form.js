@@ -30,7 +30,6 @@ class AnswerForm extends React.Component{
       sort_order: this.state.sort_order,
     }).then(
       result => {
-        console.log('result get', result);
         this.props.reset();
       },
       error => {
@@ -41,7 +40,6 @@ class AnswerForm extends React.Component{
   }
 
   render() {
-    console.log('state', this.state)
     const buttonText = 'Link answer to Question';
     return(
       <React.Fragment>

@@ -25,7 +25,7 @@ class Questions extends React.Component {
     }
   }
 
-  loadQuestions(data) {
+  loadQuestions(data = {}) {
     this.setState({ isLoaded: false });
     API.Question.get(data).then(
       result => {

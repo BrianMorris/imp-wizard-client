@@ -10,10 +10,6 @@ body {
   color:rgba(0,0,0,.95);
 }
 
-.categoryButton {
-  /* min-width:20vw; */
-}
-
 #rail {
   top:100%;
 }
@@ -32,4 +28,14 @@ button > i.cancelIcon {
 
 .noClick, button.ui.noClick {
   cursor: text
+}
+
+.ui.toggle.checkbox[class*="right floated"] {
+  float: right !important;
+  margin-right: 0em !important;
+  margin-left: 1em !important;
+} 
+
+.ui.list .list>.item .header, .ui.list>.item .header.listHeader {
+  display:inline-block;
 }

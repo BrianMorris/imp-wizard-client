@@ -4,7 +4,7 @@ import { Router } from "@reach/router";
 import AppNav from "./app-nav";
 import Questions from "./question/questions";
 import QuestionManager from "./question/question-manager";
-import Importfields from "./importfield/importfield";
+import ImportManager from "./import/import-manager";
 import Linkage from "./linkage";
 import Support from "./support";
 import Home from "./home";
@@ -21,7 +21,7 @@ class Layout extends React.Component {
                 <Home path="/" name="home" />
                 <Questions path="questions" name="questions" />
                 <QuestionManager path="questionmanager/:id" name="questionmanager" />
-                <Importfields path="importfields" name="importfields" />
+                <ImportManager path="imports" name="imports" />
                 <Linkage path="linkage" name="linkage" />
                 <Support path="support" name="support" />
               </Router>

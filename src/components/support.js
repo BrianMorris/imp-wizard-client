@@ -1,5 +1,5 @@
 import React from "react";
-import { Header, Segment, Container, Button, Item } from "semantic-ui-react";
+import { Header } from "semantic-ui-react";
 
 class Support extends React.Component {
   render() {

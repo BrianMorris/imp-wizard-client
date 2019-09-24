@@ -15,9 +15,9 @@ const API = {
     }
   },
   Question: {
-    get: function(data) {
-      let question_id = data && data.hasOwnProperty('question_id') && data.question_id; 
-      let filter = data && data.hasOwnProperty('filter') && data.filter;
+    get: function({question_id, filter}) {
+      // let question_id = data && data.hasOwnProperty('question_id') && data.question_id; 
+      // let filter = data && data.hasOwnProperty('filter') && data.filter;
 
       return fetch(`${API.URL}/question${question_id ? "/" + question_id : ""}${filter ? "?filter=" + filter:""}`).then(parseJSON);
     },
@@ -56,8 +56,38 @@ const API = {
     },
     downloadTemplate: function(import_id) {
       return fetch(`${API.URL}/import/${import_id}/template`).then(parseJSON);
-    }
-  
+    },
+    getImporttypes: function(active = null) {
+      return fetch(`${API.URL}/importtype${active === null ? '' : '?active=' + active}`).then(parseJSON);
+    },
+    createImporttype: function({name, description, active}) {
+      return fetch(`${API.URL}/importtype`, {
+        method: "POST", 
+        headers: {
+          "Content-Type": "application/json",
+          "Accept":"application/json"
+        },
+        body: JSON.stringify({
+          name,
+          description,
+          active
+        })
+      }).then(parseJSON);
+    },
+    updateImporttype: function(importtype_id, {name, description, active}) {
+      return fetch(`${API.URL}/importtype/${importtype_id}`, {
+        method: "PUT", 
+        headers: {
+          "Content-Type": "application/json",
+          "Accept":"application/json"
+        },
+        body: JSON.stringify({
+          name,
+          description,
+          active
+        })
+      }).then(parseJSON);
+    },
   },
   Importfield: {
     unlinkImportfield: function(answer_id, importfield_id) {
@@ -75,19 +105,26 @@ const API = {
         })
       }).then(parseJSON);
     },
+    createImportfield: function({importtype_id, name, description}) {
+      return fetch(`${API.URL}/importfield`, {
+        method: "POST", 
+        headers: { "Content-Type": "application/json"},
+        body: JSON.stringify({
+          importtype_id,
+          name,
+          description
+        })
+      }).then(parseJSON);
+    }, 
     getAnswerFields: function(answer_id) {
       return fetch(`${API.URL}/answer/${answer_id}/importfield`).then(parseJSON);
-    },
-    getDropdownImporttypes: function() {
-      return fetch(`${API.URL}/import`).then(parseJSON);
-    },
-    getDropdownImportfields: function(importtype_id) {
+    }, 
+    getImportfields: function(importtype_id) {
       return fetch(`${API.URL}/importfield?importtype_id=${importtype_id}`).then(parseJSON);
     }
   },
   Answer: {
     updateAnswer: function({answer_id, name, description, sort_order}) {
-      console.log('calling update', answer_id, name, description, sort_order);
       return fetch(`${API.URL}/answer/${answer_id}`, {
         method: "PUT", 
         headers: {

@@ -6,8 +6,8 @@ import Answer from "../answer/answer";
 import AnswerForm from "../answer/answer-form";
 import * as Constants from "../../helpers/constants";
 import API from "../../service/api";
-import Importfield from "../importfield/importfield";
-import ImportfieldForm from "../importfield/importfield-form";
+import Importfield from "../import/importfield";
+import ImportfieldForm from "../import/importfield-form";
 
 class QuestionManager extends React.Component {
 
