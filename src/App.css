@@ -39,3 +39,8 @@ button > i.cancelIcon {
 .ui.list .list>.item .header, .ui.list>.item .header.listHeader {
   display:inline-block;
 }
+
+.popup {
+  opacity: 0.9;
+  padding: '1em';
+}

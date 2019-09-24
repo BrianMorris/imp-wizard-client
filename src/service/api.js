@@ -12,6 +12,16 @@ const API = {
     },
     getNextQuestion: function(groupId) {
       return fetch(`${API.URL}/group/${groupId}/nextquestion`).then(parseJSON);
+    },
+    create: function({name, description, active}) {
+      return fetch(`${API.URL}/group`, {
+        method: "POST", 
+        headers: {
+          "Content-Type": "application/json", 
+          "Accept":"application/json"
+        },
+        body: JSON.stringify({name, description, active})
+      }).then(parseJSON);
     }
   },
   Question: {
@@ -108,7 +118,10 @@ const API = {
     createImportfield: function({importtype_id, name, description}) {
       return fetch(`${API.URL}/importfield`, {
         method: "POST", 
-        headers: { "Content-Type": "application/json"},
+        headers: {
+          "Content-Type": "application/json",
+          "Accept":"application/json"
+        },
         body: JSON.stringify({
           importtype_id,
           name,

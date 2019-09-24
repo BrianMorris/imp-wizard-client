@@ -43,8 +43,8 @@ class Questions extends React.Component {
     );
   }
 
-  editQuestion(e) {
-    navigate("/questionmanager/1");
+  editQuestion(question_id) {
+    navigate("/questionmanager/" + question_id);
   }
 
   handleChange = (e) => {
@@ -85,7 +85,7 @@ class Questions extends React.Component {
         return (
           <React.Fragment key={question.id}>
             {groupHeader}
-            <Segment style={{"marginLeft": parent_count * 50}} onClick={(e) => this.editQuestion(e)} >
+            <Segment style={{"marginLeft": parent_count * 50}} onClick={() => this.editQuestion(question.id)} >
               <Question  question={question} hide_group={true}/>
             </Segment>
           </React.Fragment>

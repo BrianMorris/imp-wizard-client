@@ -1,6 +1,9 @@
 import React from "react";
-import { Popup, Checkbox, Button, Header, Form, Segment, List } from "semantic-ui-react";
+import { Header, Segment, List } from "semantic-ui-react";
 import API from '../../service/api';
+import ImporttypeItem from './importtypeItem';
+import ImportfieldForm from './importfield-form';
+import ImporttypeForm from './importtype-form';
 
 class ImportManager extends React.Component {
 
@@ -19,9 +22,6 @@ class ImportManager extends React.Component {
 
   handleClick = (e) => {
     e.stopPropagation();
-
-    // const item_id = this.props.answer_id;
-    // this.props.handleClick(Constants.IMPORTFIELD, item_id);
   }
 
   onChange = (e) => {
@@ -78,12 +78,10 @@ class ImportManager extends React.Component {
   getImporttypeImportfields(importtype_id) {
     API.Importfield.getImportfields(importtype_id).then(
       result => {
-        console.log('res is', result);
         this.setState({
           importfields: result,
           activeImporttype_id: importtype_id,
         })
-        this.resetForms();
       },
       error => {
 
@@ -93,8 +91,10 @@ class ImportManager extends React.Component {
   
   resetForms() {
     this.setState({
-      name:'',
-      description:''
+      typeName:'',
+      typeDescription:'',
+      fieldName:'',
+      fieldDescription:''
     })
   }
   
@@ -105,10 +105,8 @@ class ImportManager extends React.Component {
       active:true
     }).then(
       result => {
-        console.log('the rese', result)
-
-        // reload importfieldtypes
         this.getImporttypes();
+        this.resetForms();
       },
       error => {
 
@@ -117,30 +115,28 @@ class ImportManager extends React.Component {
   }
 
   createImportfield = () => {
+    console.log('calling creata');
     API.Importfield.createImportfield({
       importtype_id: this.state.activeImporttype_id,
       name: this.state.fieldName,
       description: this.state.fieldDescription}).then(
       result => {
-        console.log('the rese', result)
-        // reload importfieldtypes
         this.getImporttypeImportfields(this.state.activeImporttype_id);
+        this.resetForms();
       },
       error => {
-
+        console.log('error', error);
       }
     )
   }
 
   handleCheckboxToggle(importtype_id, active) {
-    console.log('idaa', importtype_id)
     API.Import.updateImporttype(importtype_id, {active: !active}).then(
       result => {
-        console.log('haha', result);
         this.getImporttypes();
       },
       error => {
-
+        console.log('error', error);
       }
     )
   }
@@ -148,29 +144,31 @@ class ImportManager extends React.Component {
   render() {
     
     const AddImportfieldForm = (
-    <Segment raised color='black'>
-      <Form name='importfield' onClick={this.handleClick} onSubmit={this.createImportfield}>
-        <Header size="tiny" textAlign='center'>Add Import Field</Header>
-        <Form.Group width='16'>
-          <Form.Input width='3' placeholder='Name' onChange={this.onChange} name='fieldName' value={this.state.fieldName} />
-          <Form.Input width='10' placeholder='Description' onChange={this.onChange} name='fieldDescription' value={this.state.fieldDescription} />
-          <Form.Button width='2'  disabled={!this.state.fieldName && !this.state.fieldDescription} primary> Submit</Form.Button>
-        </Form.Group>
-      </Form>
-    </Segment>
+      <ImportfieldForm 
+        onChange={this.onChange}
+        onSubmit={this.createImportfield}
+        fieldName={this.state.fieldName}
+        fieldDescription={this.state.fieldDescription}
+      />
     );
 
     const AddImporttypeForm = (
-    <Segment raised color='black'>
-      <Form name='importtype' onClick={this.handleClick} onSubmit={this.createImporttype}>
-        <Header size="tiny" textAlign='center'>Add Import Type</Header>
-        <Form.Group width='16'>
-          <Form.Input width='4' placeholder='Name' onChange={this.onChange} name='typeName' value={this.state.typeName} />
-          <Form.Input width='10' placeholder='Description' onChange={this.onChange} name='typeDescription' value={this.state.typeDescription} />
-          <Form.Button  disabled={!this.state.typeName && !this.state.typeDescription} primary> Submit</Form.Button>
-        </Form.Group>
-      </Form>
-    </Segment>
+      <ImporttypeForm 
+        onChange={this.onChange}
+        onSubmit={this.createImporttype}
+        typeName={this.state.typeName}
+        typeDescription={this.state.typeDescription}
+      />
+    // <Segment raised color='black'>
+    //   <Form name='importtype' onClick={this.handleClick} onSubmit={this.createImporttype}>
+    //     <Header size="tiny" textAlign='center'>Add Import Type</Header>
+    //     <Form.Group width='16'>
+    //       <Form.Input width='4' placeholder='Name' onChange={this.onChange} name='typeName' value={this.state.typeName} />
+    //       <Form.Input width='10' placeholder='Description' onChange={this.onChange} name='typeDescription' value={this.state.typeDescription} />
+    //       <Form.Button  disabled={!this.state.typeName && !this.state.typeDescription} primary> Submit</Form.Button>
+    //     </Form.Group>
+    //   </Form>
+    // </Segment>
     );
 
 
@@ -186,20 +184,19 @@ class ImportManager extends React.Component {
 
     const importtypes = this.state.importtypes.map((importtype) => {
       return(
-      <List.Item key={importtype.id} id={importtype.id} onClick={this.expandImporttype}>
-        <List.Icon name={this.state.activeImporttype_id === importtype.id ? 'angle down' : 'angle right'} />
-        <List.Content >
-          <List.Header className='listHeader'>
-          {importtype.name}
-          </List.Header>
-          <Popup content='activate' trigger={<Checkbox onChange={() => this.handleCheckboxToggle(importtype.id, importtype.active)} onClick={this.handleClick} className='right floated' toggle checked={!!importtype.active} />} />
-          <List.Description>{importtype.description}</List.Description>
+        <ImporttypeItem 
+          key={importtype.id}
+          importtype={importtype} 
+          activeImporttype_id={this.state.activeImporttype_id}
+          expandImporttype={this.expandImporttype}
+          handleClick={this.handleClick}
+          handleCheckboxToggle={(importtype_id, active) => this.handleCheckboxToggle(importtype_id, active)}
+        >
           {this.state.activeImporttype_id === importtype.id && AddImportfieldForm}
           <List.List as='ul' relaxed='true'>
             {this.state.activeImporttype_id === importtype.id && importfields}
           </List.List>
-        </List.Content>
-      </List.Item>
+        </ImporttypeItem>
       );
     })
 

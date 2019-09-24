@@ -1,5 +1,5 @@
 import React from "react";
-import { List, Header, Segment, Button } from "semantic-ui-react";
+import { Popup, List, Header, Segment, Button } from "semantic-ui-react";
 import * as Constants from "../../helpers/constants";
 
 class Importfield extends React.Component {
@@ -16,14 +16,16 @@ class Importfield extends React.Component {
     if(this.props.answerimportfields) {
       // let answerimportfields = this.props.answerimportfields.answerimportfields;
       importfields = this.props.answerimportfields.map((field) => {
+        let importfieldButton = <Button secondary compact size='small'>{field.importfield.name}</Button>;
           return (
             <List.Item key={field.id}>
               <List.Content>
-                <Button secondary compact size='small'>{field.importfield.name}</Button>
+                {field.importfield.description ? 
+                <Popup className='popup' inverted content={field.importfield.description} trigger={importfieldButton} />
+                :
+                importfieldButton
+                }
               </List.Content>
-              <List.Description>
-                {field.importfield.description}
-              </List.Description>
             </List.Item>
           );
 

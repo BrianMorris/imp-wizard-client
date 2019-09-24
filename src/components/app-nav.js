@@ -31,14 +31,14 @@ class AppNav extends React.Component {
           Home
         </Menu.Item>
 
-        {/* <Menu.Item
+        <Menu.Item
           onClick={() => {
-              navigate("/importfields");
+              navigate("/groups");
           }}
         >
-            Import fields
-        </Menu.Item> */}
-
+          Groups
+        </Menu.Item>
+        
         <Menu.Item
           onClick={() => {
               navigate("/imports");

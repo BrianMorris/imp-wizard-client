@@ -10,7 +10,7 @@ class Home extends React.Component {
         <Segment key={item.id}>
           <Item>
             <Item.Content>
-              <Button className="categoryButton" primary onClick={() => navigate("./" + item.route)}> {item.title} </Button>
+              <Button className="categoryButton" secondary onClick={() => navigate("./" + item.route)}> {item.title} </Button>
               <Item.Description>
                 {item.description}
               </Item.Description>

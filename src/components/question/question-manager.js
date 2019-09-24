@@ -7,7 +7,7 @@ import AnswerForm from "../answer/answer-form";
 import * as Constants from "../../helpers/constants";
 import API from "../../service/api";
 import Importfield from "../import/importfield";
-import ImportfieldForm from "../import/importfield-form";
+import ImportfieldLinkForm from "../import/importfieldLink-form";
 
 class QuestionManager extends React.Component {
 
@@ -116,7 +116,7 @@ class QuestionManager extends React.Component {
     const answerSegments = answers.map((answer, index) => {
       const answerimportfields = answer.answerimportfields;
       const importfieldSegment = (this.state.focus_constant === Constants.IMPORTFIELD && this.state.focus_id === answer.id) ?
-        <ImportfieldForm 
+        <ImportfieldLinkForm 
           answerimportfields={answerimportfields}
           handleImportfieldUnlink={(importfield_id) => this.handleImportfieldUnlink(answer.id, importfield_id, index)}
           handleImportfieldLink={(importfield_id) => this.handleImportfieldLink(answer.id, importfield_id)}

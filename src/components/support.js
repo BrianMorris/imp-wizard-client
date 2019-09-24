@@ -1,10 +1,13 @@
 import React from "react";
-import { Header } from "semantic-ui-react";
+import { Segment, Header } from "semantic-ui-react";
 
 class Support extends React.Component {
   render() {
     return(
-      <Header>Support </Header>
+      <Segment>
+        <Header>Support:</Header>
+        Feature still in development.
+      </Segment>
       );
   }
 }

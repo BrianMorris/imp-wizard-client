@@ -1,13 +1,13 @@
 const adminCategories = [
   {
     "id": 1,
-    "title":"questions",
+    "title":"Questions",
     "description": "Create, update, or delete questions",
     "route":"questions"
   },
   {
     "id": 2,
-    "title":"imports",
+    "title":"Imports",
     "description": "Create, update, or delete imports",
     "route":"imports"
   },
@@ -25,7 +25,7 @@ const adminCategories = [
   // },
   {
     "id": 4,
-    "title":"user support",
+    "title":"User Support",
     "description": "Audit and fix specific user implementations",
     "route":"support"
   },

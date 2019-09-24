@@ -5,6 +5,7 @@ import AppNav from "./app-nav";
 import Questions from "./question/questions";
 import QuestionManager from "./question/question-manager";
 import ImportManager from "./import/import-manager";
+import GroupManager from "./group/group-manager";
 import Linkage from "./linkage";
 import Support from "./support";
 import Home from "./home";
@@ -22,6 +23,7 @@ class Layout extends React.Component {
                 <Questions path="questions" name="questions" />
                 <QuestionManager path="questionmanager/:id" name="questionmanager" />
                 <ImportManager path="imports" name="imports" />
+                <GroupManager path="groups" name="groups" />
                 <Linkage path="linkage" name="linkage" />
                 <Support path="support" name="support" />
               </Router>

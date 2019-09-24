@@ -23,13 +23,12 @@ class ImporttypeDropdown extends React.Component {
   componentDidMount() {
     API.Import.getImporttypes(API.Status.ACTIVE).then(
       result => {
-          // TODO: make the importtype field default value link to a group by adding a group column
           let importDropdownOptions = result.map((field, index) => {
-          field.text = field.name;
-          field.key = field.id;
-          field.active = null;
-          field.value = field.id
-          return field;
+            field.text = field.name;
+            field.key = field.id;
+            field.active = null;
+            field.value = field.id
+            return field;
         });
         
         this.setState({
