@@ -46,9 +46,19 @@ const API = {
     resetAll: function() {
       return fetch(`${API.URL}/question/reset`).then(parseJSON);
     },
-    updateQuestion: function({question_id, group_id, name, description, sort_order}) {
+    update: function({question_id, group_id, name, description, sort_order}) {
       return fetch(`${API.URL}/question/${question_id}`, {
         method: "PUT", 
+        headers: {
+          "Content-Type": "application/json", 
+          "Accept":"application/json"
+        },
+        body: JSON.stringify({name, group_id, description, sort_order})
+      }).then(parseJSON);
+    },
+    create: function({group_id, name, description, sort_order}) {
+      return fetch(`${API.URL}/question`, {
+        method: "POST", 
         headers: {
           "Content-Type": "application/json", 
           "Accept":"application/json"

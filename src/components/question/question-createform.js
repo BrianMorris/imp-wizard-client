@@ -1,15 +1,15 @@
 import React from "react";
-import {Dropdown, Form, Button, Header } from "semantic-ui-react";
+import { Dropdown, Form, Button, Header } from "semantic-ui-react";
 import API from "../../service/api";
 
-class QuestionForm extends React.Component {
+class QuestionCreateForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      name: this.props.question.name,
-      description: this.props.question.description || '',
-      group_id: this.props.question.group.id,
-      sort_order: this.props.question.sort_order,
+      name: '',
+      description: '',
+      group_id: '',
+      sort_order: '',
       groupDropdownOptions: [],
       changed: false
     }
@@ -57,8 +57,7 @@ class QuestionForm extends React.Component {
   }
 
  handleSubmit = (e) => {
-    API.Question.updateQuestion({
-      question_id: this.props.question.id,
+    API.Question.create({
       group_id: this.state.group_id,
       name: this.state.name,
       description: this.state.description,
@@ -68,12 +67,10 @@ class QuestionForm extends React.Component {
         this.props.reset();
       },
       error => {
-        // handle errors better later
         console.log('err', error);
       }
     )
  }
-  
 
   render() {
 
@@ -88,8 +85,8 @@ class QuestionForm extends React.Component {
     return (
       <React.Fragment>
         <Form onSubmit={this.handleSubmit}>
-          <Form.Input label='question' onChange={this.onChange} name='name' value={this.state.name} />
-          <Form.Input label='description' onChange={this.onChange} name='description' value={this.state.description} />
+          <Form.Input label='Question' onChange={this.onChange} name='name' value={this.state.name} />
+          <Form.Input label='Description' onChange={this.onChange} name='description' value={this.state.description} />
           <Form.Group width='16'>
             <Form.Field width='12'>
               <label> Group </label>
@@ -116,4 +113,4 @@ class QuestionForm extends React.Component {
   }
 }
 
-export default QuestionForm ;
+export default QuestionCreateForm;

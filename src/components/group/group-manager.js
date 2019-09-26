@@ -19,7 +19,6 @@ class GroupManager extends React.Component {
   getGroups = () => {
     API.Group.get().then(
       result => {
-        console.log('re', result);
         this.setState({
           groups: result
         })
@@ -32,12 +31,10 @@ class GroupManager extends React.Component {
 
   onSubmit = () => {
     const {name, description} = this.state;
-    console.log('submitted');
     API.Group.create({
        name, description
     }).then(
       result => {
-        console.log('resssult', result);
         this.resetForms();
         this.getGroups();
       },

@@ -33,20 +33,28 @@ class AppNav extends React.Component {
 
         <Menu.Item
           onClick={() => {
-              navigate("/groups");
+              navigate("/questions");
           }}
         >
-          Groups
+          Questions
         </Menu.Item>
         
         <Menu.Item
           onClick={() => {
-              navigate("/imports");
+            navigate("/imports");
           }}
         >
             Imports
         </Menu.Item>
         
+          <Menu.Item
+            onClick={() => {
+                navigate("/groups");
+            }}
+          >
+            Groups
+          </Menu.Item>
+          
         <Menu.Item
           onClick={() => {
               navigate("/support");

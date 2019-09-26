@@ -8,15 +8,15 @@ const adminCategories = [
   {
     "id": 2,
     "title":"Imports",
-    "description": "Create, update, or delete imports",
+    "description": "manage imports and importfields",
     "route":"imports"
   },
-  // {
-  //   "id": 2,
-  //   "title":"importfields",
-  //   "description": "Create, update, or delete importfields",
-  //   "route":"importfields"
-  // },
+  {
+    "id": 3,
+    "title":"Groups",
+    "description": "Create groups",
+    "route":"groups"
+  },
   // {
   //   "id": 3,
   //   "title":"imports",
@@ -24,7 +24,7 @@ const adminCategories = [
   //   "route":"linkage"
   // },
   {
-    "id": 4,
+    "id": 5,
     "title":"User Support",
     "description": "Audit and fix specific user implementations",
     "route":"support"

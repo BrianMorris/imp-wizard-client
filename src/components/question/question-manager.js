@@ -1,7 +1,7 @@
 import React from "react";
 import { Loader, Dimmer, Button, Label, Rail, Segment, Header } from "semantic-ui-react";
 import Question from "./question";
-import QuestionForm from "./question-form";
+import QuestionForm from "./question-updateform";
 import Answer from "../answer/answer";
 import AnswerForm from "../answer/answer-form";
 import * as Constants from "../../helpers/constants";

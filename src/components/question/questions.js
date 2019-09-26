@@ -1,6 +1,7 @@
 import React from "react";
 import Question from "./question";
-import {Form, Header, Segment, Loader, Dimmer } from "semantic-ui-react";
+import QuestionCreateForm from "./question-createform";
+import { Accordion, Form, Icon, Popup, Button, Header, Segment, Loader, Dimmer } from "semantic-ui-react";
 import { navigate } from "@reach/router";
 import API from "../../service/api";
 
@@ -10,7 +11,9 @@ class Questions extends React.Component {
     this.state = {
       isLoaded: false,
       questions: null,
-      filter:null
+      hiddenGroups: [],
+      showNewQuestionForm: false,
+      filter: null
     };
   }
   
@@ -47,6 +50,12 @@ class Questions extends React.Component {
     navigate("/questionmanager/" + question_id);
   }
 
+  handleClick = () => {
+    this.setState({
+      showNewQuestionForm:false
+    })
+  }
+
   handleChange = (e) => {
     // handle input filter delay
     clearTimeout(this.timer);
@@ -68,6 +77,15 @@ class Questions extends React.Component {
     this.loadQuestions(data);
   }
 
+  reset = () => {
+    // reset question list
+    this.loadQuestions();
+    // return to question list
+    this.setState({
+      showNewQuestionForm: false
+    }); 
+  }
+
   composeQuestionComponent() {
     let questions = null;
     if(this.state.questions) {
@@ -76,18 +94,26 @@ class Questions extends React.Component {
 
       questions = this.state.questions.map((question) => {
         question.parent_answer_id ? parent_count++ : parent_count = 0; 
+        const groupHidden = this.state.hiddenGroups.find((x) => x === question.group.id);
 
         let groupHeader = null;
         if(group !== question.group.name) {
           group = question.group.name;
-          groupHeader = <Segment inverted><Header size="small">{question.group.name}</Header></Segment>;
+          groupHeader = <Segment inverted onClick={() => this.toggleGroup(question.group.id, groupHidden)}><Header size="small">{question.group.name}
+          <Icon name={ groupHidden ? 'angle right' : 'angle down'} />
+          </Header>
+          </Segment>;
         }
         return (
           <React.Fragment key={question.id}>
             {groupHeader}
+
+            {groupHidden ? null 
+            :
             <Segment style={{"marginLeft": parent_count * 50}} onClick={() => this.editQuestion(question.id)} >
               <Question  question={question} hide_group={true}/>
             </Segment>
+            }
           </React.Fragment>
           );
         });
@@ -95,26 +121,75 @@ class Questions extends React.Component {
     return questions;
   }
 
+  toggleGroup(group_id, groupHidden) {
+    let newHiddenGroups= this.state.hiddenGroups;
+
+    if(groupHidden) {
+      let index = newHiddenGroups.indexOf(group_id);       
+      newHiddenGroups.splice(index, 1);
+    }
+    else {
+      newHiddenGroups.push(group_id);
+    }
+
+    this.setState({
+      hiddenGroups:newHiddenGroups
+    });
+  }
+
+  showNewQuestionForm = () => {
+    this.setState({
+      showNewQuestionForm:true
+    })
+  }
+
   render() {
-    // conditional rendering
     const questions = this.composeQuestionComponent();
+   
+   
+    const questionList =   
+      this.state.isLoaded  ?
+        <React.Fragment>
+          {questions}
+        </React.Fragment>
+      :
+        <Segment style={{ minHeight: 125 }}>
+          <Dimmer active inverted>
+            <Loader inverted />
+          </Dimmer>
+        </Segment>
+      ;
+
+    const newQuestionButton =
+    <Icon inverted id='plusIconButton' onClick={this.showNewQuestionForm} circular size='large' name='plus'/>
 
     return (
       <React.Fragment>
-        <Header textAlign="center">Questions</Header>
-        <Form>
-          <Form.Input name="filter" icon='search'  placeholder='Search...' value={this.state.search} onChange={this.handleChange} />
-        </Form>
+        <Header textAlign="center">Questions  
+         
+        {!this.state.showNewQuestionForm && <Popup className='popup' inverted content='New Question' trigger={newQuestionButton} />}
+        </Header>
+        {this.state.showNewQuestionForm ?
+          <React.Fragment>
+            <Popup 
+              className='popup'
+              inverted
+              content='back'
+              trigger={<Icon id='backButton' onClick={this.handleClick} style={{cursor:'pointer'}} size='large' name='arrow circle left' />}
+            />
+            <QuestionCreateForm
+              reset={this.reset}
+            />
+          </React.Fragment>
+          :
+          <React.Fragment>
 
-              {this.state.isLoaded  ? (
-                questions
-              ) : (
-                <Segment style={{ minHeight: 125 }}>
-                  <Dimmer active inverted>
-                    <Loader inverted />
-                  </Dimmer>
-                </Segment>
-              )}
+          <Form>
+            <Form.Input name="filter" icon='search'  placeholder='Search...' value={this.state.search} onChange={this.handleChange} />
+          </Form>
+          {questionList}
+          </React.Fragment>
+        }
       </React.Fragment>
     );
   }

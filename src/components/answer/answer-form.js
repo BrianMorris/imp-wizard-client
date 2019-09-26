@@ -33,7 +33,6 @@ class AnswerForm extends React.Component{
         this.props.reset();
       },
       error => {
-        // handle errors better later
         console.log('err', error);
       }
     )

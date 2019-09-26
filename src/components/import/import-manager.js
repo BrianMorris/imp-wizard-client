@@ -115,7 +115,6 @@ class ImportManager extends React.Component {
   }
 
   createImportfield = () => {
-    console.log('calling creata');
     API.Importfield.createImportfield({
       importtype_id: this.state.activeImporttype_id,
       name: this.state.fieldName,
