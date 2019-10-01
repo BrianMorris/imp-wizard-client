@@ -1,13 +1,13 @@
 import React from "react";
 import { Popup, Icon, Form, Dropdown, List, Header, Segment, Button } from "semantic-ui-react";
-import API from '../../service/api';
+import API from '../../../service/api';
 
 class ImportfieldLinkForm extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      importDropdownOptions: [],
+      importtypeDropdownOptions: [],
       importtype: null,
       importfieldDropdownOptions: [],
       importfield: null
@@ -15,10 +15,10 @@ class ImportfieldLinkForm extends React.Component {
   }
 
   componentDidMount() {
-    API.Import.getImporttypes(API.Status.ACTIVE).then(
+    API.Importtype.get(API.Status.ACTIVE).then(
       result => {
           // TODO: make the importtype field default value link to a grouop by adding a group column
-          let importDropdownOptions = result.map((field, index) => {
+          let importtypeDropdownOptions = result.map((field, index) => {
           field.text = field.name;
           field.key = field.id;
           field.active = null;
@@ -27,7 +27,7 @@ class ImportfieldLinkForm extends React.Component {
         });
         
         this.setState({
-          importDropdownOptions: importDropdownOptions
+          importtypeDropdownOptions: importtypeDropdownOptions
         });
       },
       error => {
@@ -45,9 +45,9 @@ class ImportfieldLinkForm extends React.Component {
   }
 
   populateImportfieldDropdown = (importtype_id) => {
-    API.Importfield.getImportfields(importtype_id).then(
+    API.Importfield.get(importtype_id).then(
       result => {
-        const importDropdownOptions = result.map((field) => {
+        const importtypeDropdownOptions = result.map((field) => {
           field.text = field.name;
           field.key = field.id;
           field.value = field.id;
@@ -55,7 +55,7 @@ class ImportfieldLinkForm extends React.Component {
         });
 
         this.setState({
-          importfieldDropdownOptions: importDropdownOptions
+          importfieldDropdownOptions: importtypeDropdownOptions
         });
       },
       error => {
@@ -124,7 +124,7 @@ class ImportfieldLinkForm extends React.Component {
                 selection 
                 value={this.state.importtype}
                 // defaultValue={defaultDropdown}
-                options={this.state.importDropdownOptions} />
+                options={this.state.importtypeDropdownOptions} />
             </Form.Field>
             <Form.Field>
               <Dropdown 

@@ -1,6 +1,6 @@
 import React from "react";
 import { Popup, List, Header, Segment, Button } from "semantic-ui-react";
-import * as Constants from "../../helpers/constants";
+import * as Constants from "../../../helpers/constants";
 
 class Importfield extends React.Component {
 

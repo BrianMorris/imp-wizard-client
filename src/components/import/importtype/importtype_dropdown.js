@@ -1,6 +1,6 @@
 import React from "react";
 import { Form, Dropdown } from "semantic-ui-react";
-import API from '../../service/api';
+import API from '../../../service/api';
 
 class ImporttypeDropdown extends React.Component {
   constructor(props) {
@@ -21,7 +21,7 @@ class ImporttypeDropdown extends React.Component {
   }
 
   componentDidMount() {
-    API.Import.getImporttypes(API.Status.ACTIVE).then(
+    API.Importtype.get(API.Status.ACTIVE).then(
       result => {
           let importDropdownOptions = result.map((field, index) => {
             field.text = field.name;

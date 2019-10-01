@@ -1,7 +1,7 @@
 import React from "react";
 import { List, Segment, Header } from 'semantic-ui-react';
 import API from "../../service/api";
-import GroupForm from './group-form';
+import GroupForm from './group_form';
 class GroupManager extends React.Component {
   constructor(props) {
     super(props);
@@ -83,8 +83,8 @@ class GroupManager extends React.Component {
 
     return (
       <Segment>
-        <Header> 
-          manage groups
+        <Header textAlign='center'> 
+          Manage Groups
         </Header>
         {groupForm}
         <List divided relaxed>

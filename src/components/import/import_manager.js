@@ -1,9 +1,9 @@
 import React from "react";
 import { Header, Segment, List } from "semantic-ui-react";
 import API from '../../service/api';
-import ImporttypeItem from './importtypeItem';
-import ImportfieldForm from './importfield-form';
-import ImporttypeForm from './importtype-form';
+import ImporttypeItem from './importtype/importtype_item';
+import ImportfieldForm from './importfield/importfield_form';
+import ImporttypeForm from './importtype/importtype_form';
 
 class ImportManager extends React.Component {
 
@@ -43,7 +43,7 @@ class ImportManager extends React.Component {
   }
 
   getImporttypes() {
-    API.Import.getImporttypes().then(
+    API.Importtype.get().then(
       result => {
         // TODO: make the importtype field default value link to a group by adding a group column
         let importDropdownOptions = result.map((field, index) => {
@@ -76,7 +76,7 @@ class ImportManager extends React.Component {
   }
 
   getImporttypeImportfields(importtype_id) {
-    API.Importfield.getImportfields(importtype_id).then(
+    API.Importfield.get(importtype_id).then(
       result => {
         this.setState({
           importfields: result,
@@ -99,7 +99,7 @@ class ImportManager extends React.Component {
   }
   
   createImporttype = () => {
-    API.Import.createImporttype({
+    API.Importtype.create({
       name: this.state.typeName,
       description: this.state.typeDescription, 
       active:true
@@ -115,7 +115,7 @@ class ImportManager extends React.Component {
   }
 
   createImportfield = () => {
-    API.Importfield.createImportfield({
+    API.Importfield.create({
       importtype_id: this.state.activeImporttype_id,
       name: this.state.fieldName,
       description: this.state.fieldDescription}).then(
@@ -130,7 +130,7 @@ class ImportManager extends React.Component {
   }
 
   handleCheckboxToggle(importtype_id, active) {
-    API.Import.updateImporttype(importtype_id, {active: !active}).then(
+    API.Importtype.update(importtype_id, {active: !active}).then(
       result => {
         this.getImporttypes();
       },

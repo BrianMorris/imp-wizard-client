@@ -1,11 +1,11 @@
 import React from "react";
 import { Grid } from "semantic-ui-react";
 import { Router } from "@reach/router";
-import AppNav from "./app-nav";
+import AppNav from "./app_nav";
 import Questions from "./question/questions";
-import QuestionManager from "./question/question-manager";
-import ImportManager from "./import/import-manager";
-import GroupManager from "./group/group-manager";
+import QuestionManager from "./question/question_manager";
+import ImportManager from "./import/import_manager";
+import GroupManager from "./group/group_manager";
 import Linkage from "./linkage";
 import Support from "./support";
 import Home from "./home";

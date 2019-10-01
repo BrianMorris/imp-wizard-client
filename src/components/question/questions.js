@@ -1,7 +1,7 @@
 import React from "react";
 import Question from "./question";
-import QuestionCreateForm from "./question-createform";
-import { Accordion, Form, Icon, Popup, Button, Header, Segment, Loader, Dimmer } from "semantic-ui-react";
+import QuestionCreateForm from "./question_create_form";
+import { Form, Icon, Popup, Header, Segment, Loader, Dimmer } from "semantic-ui-react";
 import { navigate } from "@reach/router";
 import API from "../../service/api";
 
@@ -178,6 +178,7 @@ class Questions extends React.Component {
               trigger={<Icon id='backButton' onClick={this.handleClick} style={{cursor:'pointer'}} size='large' name='arrow circle left' />}
             />
             <QuestionCreateForm
+              questions={this.state.questions}
               reset={this.reset}
             />
           </React.Fragment>

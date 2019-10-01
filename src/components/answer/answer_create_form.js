@@ -2,14 +2,14 @@ import React from "react";
 import { Button, Form } from "semantic-ui-react";
 import API from "../../service/api";
 
-class AnswerForm extends React.Component{
+export class AnswerCreateForm extends React.Component{
     constructor(props) {
     super(props);
 
     this.state = {
-      answer:this.props.answer.name,
-      description: this.props.answer.description || '',
-      sort_order: this.props.answer.sort_order,
+      answer: '',
+      description: '',
+      sort_order: '',
       changed: false
     };
   }
@@ -22,15 +22,27 @@ class AnswerForm extends React.Component{
     })
   }
 
+  reset() {
+    this.setState({
+      answer: '', 
+      description: '',
+      sort_order: '',
+      changed:false,
+    });
+
+    this.props.reset();
+    // also minimized and reload
+  }
+
   handleSubmit = (e) => {
-    API.Answer.updateAnswer({
-      answer_id: this.props.answer.id,
+    API.Answer.create({
+      question_id: this.props.question_id,
       name: this.state.answer,
       description: this.state.description,
       sort_order: this.state.sort_order,
     }).then(
       result => {
-        this.props.reset();
+        this.reset();
       },
       error => {
         console.log('err', error);
@@ -39,7 +51,6 @@ class AnswerForm extends React.Component{
   }
 
   render() {
-    const buttonText = 'Link answer to Question';
     return(
       <React.Fragment>
         <Form onSubmit={this.handleSubmit}>
@@ -49,7 +60,6 @@ class AnswerForm extends React.Component{
           </Form.Group>
           <Form.Input onChange={this.onChange} label="description" name='description'  value={this.state.description} />
           <Button name='submit' disabled={!this.state.changed} primary> Submit</Button>
-          <Button secondary> {buttonText} </Button>
         </Form>
         {this.props.children}
       </React.Fragment>
@@ -57,4 +67,4 @@ class AnswerForm extends React.Component{
   }
 }
 
-export default AnswerForm;
+ 
