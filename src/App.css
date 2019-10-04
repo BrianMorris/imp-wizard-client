@@ -52,6 +52,12 @@ button > i.cancelIcon {
   cursor:pointer;
 }
 
+.ui.header>.icon.deleteButton{
+  margin-right:0;
+  float:right;
+  font-size: 1em;
+}
+
 #backButton {
   margin-left:0.25em;
   margin-bottom:0.25em;

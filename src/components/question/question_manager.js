@@ -1,15 +1,12 @@
 import React from "react";
 import { navigate } from "@reach/router";
-import { Icon, Popup, Loader, Dimmer, Button, Label, Rail, Segment, Header } from "semantic-ui-react";
-import Question from "./question";
-import QuestionForm from "./question_update_form";
-import Answer from "../answer/answer";
-import {AnswerUpdateForm} from "../answer/answer_update_form";
-import {AnswerCreateForm} from "../answer/answer_create_form";
+import { Icon, Popup, Loader, Dimmer, Label, Rail, Segment, Header } from "semantic-ui-react";
+import { Question } from "./question";
+import QuestionUpdateForm from "./question_update_form";
 import * as Constants from "../../helpers/constants";
 import API from "../../service/api";
-import Importfield from "../import/importfield/importfield";
-import ImportfieldLinkForm from "../import/importfield/importfield_link_form";
+import { NewAnswerSegment } from "../answer/answer_create_segment";
+import { AnswerSegments } from "../answer/answer_segments";
 
 class QuestionManager extends React.Component {
 
@@ -24,19 +21,19 @@ class QuestionManager extends React.Component {
     }
     
     console.log('this.props', this.props);
-    this.getQuestionDetails.bind(this);
+    this.renderQuestionDetails.bind(this);
     this.changeFocus.bind(this);
   }
 
   componentDidMount() {
-    this.getQuestionDetails(this.props.id);
+    this.renderQuestionDetails(this.props.id);
   }
   componentWillReceiveProps(oldProps) {
     // refresh when selecting child/parent questions
-    this.getQuestionDetails(oldProps.id);
+    this.renderQuestionDetails(oldProps.id);
   }
   
-  getQuestionDetails(question_id) {
+  renderQuestionDetails(question_id) {
     API.Question.getDetail(question_id).then(
       result => {
         this.setState({
@@ -78,7 +75,7 @@ class QuestionManager extends React.Component {
     // post field and rerender
     API.Importfield.link(answer_id, importfield_id).then(
       result => {
-        this.getQuestionDetails(this.props.id);
+        this.renderQuestionDetails(this.props.id);
       },
       error => {
         console.log('er', error);
@@ -91,14 +88,13 @@ class QuestionManager extends React.Component {
   }
 
 
-  handleClick = (e, question_id) => {
+  handleQuestionNavigation= (e, question_id) => {
     e.stopPropagation();
     this.props.navigate(`/questionmanager/${question_id}`);
-
   }
 
-  resetAfterSubmision = () => {
-    this.getQuestionDetails(this.props.id);
+  reset = () => {
+    this.renderQuestionDetails(this.props.id);
     this.changeFocus(null, null);
   }
 
@@ -109,29 +105,21 @@ class QuestionManager extends React.Component {
       });
   }
   renderAnswerImportfields(importfield_id, answerIndex) {
-        const questionDetails = {...this.state.questionDetails};
-        const newImportfields = questionDetails.answers[answerIndex].answerimportfields.filter((answerimportfield) => answerimportfield.importfield_id !== importfield_id);
-        questionDetails.answers[answerIndex].answerimportfields = newImportfields;
-        this.setState({
-          questionDetails: questionDetails
-        });
+      // this results in a faster update than pinging the api, and reloading the importfields
+      const questionDetails = {...this.state.questionDetails};
+      const newImportfields = questionDetails.answers[answerIndex].answerimportfields.filter((answerimportfield) => answerimportfield.importfield_id !== importfield_id);
+      questionDetails.answers[answerIndex].answerimportfields = newImportfields;
+      this.setState({questionDetails});
   }
 
   render() {
-    let answers = [];
-
-    if(this.state.questionDetails.answers) {
-      answers = this.state.questionDetails.answers;
-    }
-    // const arrAnswers = question.answers;
-    
     const questionSegment = (
       <Segment onClick={() => this.changeFocus(Constants.QUESTION)}>
         <Header>Question:</Header>
         {this.state.focus_constant === Constants.QUESTION ?
-          <QuestionForm 
+          <QuestionUpdateForm 
               question={this.state.questionDetails}
-              reset={this.resetAfterSubmision}
+              reset={this.reset}
           /> :
           <Question 
             question={this.state.questionDetails} 
@@ -139,72 +127,7 @@ class QuestionManager extends React.Component {
         }
       </Segment>
     );
-    
-    const answerSegments = answers.map((answer, index) => {
-    const answerimportfields = answer.answerimportfields;
-    const importfieldSegment = (this.state.focus_constant === Constants.IMPORTFIELD && this.state.focus_id === answer.id) ?
-      <ImportfieldLinkForm 
-        answerimportfields={answerimportfields}
-        handleImportfieldUnlink={(importfield_id) => this.handleImportfieldUnlink(answer.id, importfield_id, index)}
-        handleImportfieldLink={(importfield_id) => this.handleImportfieldLink(answer.id, importfield_id)}
-      />
-    :
-      <Importfield  handleClick={(item_constant, item_id) => this.changeFocus(item_constant, item_id)}
-        answerimportfields={answerimportfields}
-        answer_id={answer.id}
-      />
-    ;
-
-       let parentAnswerButtons = [];
-    if(answer.child_questions.length) {
-      parentAnswerButtons  = answer.child_questions.map((child_question, index) => {
-        return(
-          <Button key={child_question.id} size='tiny' onClick={(e) => this.handleClick(e, child_question.id)}>Question id: {child_question.id}</Button>
-        );
-      });
-    }
-
-      return (
-        <Segment key={answer.id} onClick={() => this.changeFocus(Constants.ANSWER, answer.id)}>
-          <Header>Answer:</Header>
-          <Button.Group floated='right'>
-            {parentAnswerButtons}
-          </Button.Group>
-          {this.state.focus_constant === Constants.ANSWER && this.state.focus_id === answer.id ? 
-            <AnswerUpdateForm 
-              answer={answer} 
-              reset={this.resetAfterSubmision}
-            >
-              {importfieldSegment}
-            </AnswerUpdateForm>
-            :
-            <Answer 
-              key={answer.id} 
-              answer={answer} 
-            >
-            {importfieldSegment}
-            </Answer>
-          }
-        </Segment>
-      )
-    });
  
-  let newAnswerSegment =
-  <Segment>
-      {this.state.showNewAnswerForm ? 
-      <AnswerCreateForm reset={this.resetAfterSubmision} question_id={this.state.questionDetails.id}/>
-      :
-      <React.Fragment >
-        <Header onClick={this.showNewAnswerForm}>
-          <Icon inverted id='plusIconButton'  circular size='large' name='plus'/>
-          Create a new answer?
-        </Header>
-      </React.Fragment>
-      }
-    </Segment>
-
-
-
     return (
       <React.Fragment>
         <Rail id="rail" position='right'>
@@ -226,8 +149,23 @@ class QuestionManager extends React.Component {
           </Segment>
 
       }
-      {answerSegments}
-      {newAnswerSegment}
+      <AnswerSegments
+        answers={this.state.questionDetails.answers || []}
+        focus_constant={this.state.focus_constant}
+        focus_id={this.state.focus_id}
+        handleImportfieldUnlink={(answer_id, importfield_id, index) => this.handleImportfieldUnlink(answer_id, importfield_id, index)}
+        handleImportfieldLink={(answer_id, importfield_id) => this.handleImportfieldLink(answer_id, importfield_id)}
+        handleQuestionNavigation={(e, child_question_id) => this.handleQuestionNavigation(e, child_question_id)}
+        reset={this.reset}
+        changeFocus={(item_constant, item_id) => this.changeFocus(item_constant, item_id)}
+        deleteAnswer={this.deleteAnswer}
+      />
+      <NewAnswerSegment 
+          showNewAnswerForm={this.state.showNewAnswerForm}
+          onClick={this.showNewAnswerForm}
+          reset={this.reset}
+          question_id={this.state.questionDetails.id}
+      /> 
       </React.Fragment>
     );
   }

@@ -1,7 +1,7 @@
 import React from "react";
 import { Segment, Dropdown, Form, Button, Header } from "semantic-ui-react";
 import API from "../../service/api";
-import ParentChildLinkButton from './parent_child_relationship_form';
+import ParentChildLinkForm from './parent_child_link_form';
 
 class QuestionCreateForm extends React.Component {
   constructor(props) {
@@ -10,15 +10,14 @@ class QuestionCreateForm extends React.Component {
       name: '',
       description: '',
       group_id: '',
-      parent_answer_id:null,
+      parent_answer_id: null,
       sort_order: '',
       groupDropdownOptions: [],
-      changed: false
+      changed: false,
     }
   }
 
   updateParentAnswer = (answer_id) => {
-    console.log('touching parent answer')
     this.setState({
       parent_answer_id: answer_id
     });
@@ -41,6 +40,10 @@ class QuestionCreateForm extends React.Component {
   }
 
   componentDidMount() {
+    this.getGroups();
+  }
+  
+  getGroups() {
     API.Group.get().then(
       result => {
         this.mapGroupOptions(result);
@@ -49,6 +52,7 @@ class QuestionCreateForm extends React.Component {
 
       }
     )
+ 
   }
 
   mapGroupOptions(groups) {
@@ -95,9 +99,10 @@ class QuestionCreateForm extends React.Component {
     return (
       <React.Fragment>
         <Segment>
-          <ParentChildLinkButton 
+          <ParentChildLinkForm 
             updateParentAnswer={this.updateParentAnswer}  
             questions={this.props.questions} 
+            onChange={() => this.setState({changed: true})}
           />
           <Form onSubmit={this.handleSubmit}>
             <Form.Input label='Question' onChange={this.onChange} name='name' value={this.state.name} />

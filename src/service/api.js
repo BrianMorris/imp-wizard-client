@@ -25,11 +25,18 @@ const API = {
     }
   },
   Question: {
-    get: function({question_id, filter}) {
-      // let question_id = data && data.hasOwnProperty('question_id') && data.question_id; 
-      // let filter = data && data.hasOwnProperty('filter') && data.filter;
+    get: function({question_id, filter, group_id}) {
+      let queryStringParamters = '';
+      if(filter) {
+        queryStringParamters = "?filter=" + filter;
+      } else if(group_id) {
+        queryStringParamters =  "?group_id=" + group_id;
+      }
 
-      return fetch(`${API.URL}/question${question_id ? "/" + question_id : ""}${filter ? "?filter=" + filter:""}`).then(parseJSON);
+      if(question_id) {
+        return fetch(`${API.URL}/question${question_id ? "/" + question_id : ""}${queryStringParamters}`).then(parseJSON);
+      }
+      return fetch(`${API.URL}/adminquestion${queryStringParamters}`).then(parseJSON);
     },
     getDetail: function(question_id) {
       return fetch(`${API.URL}/question/${question_id}/detail`).then(parseJSON);
@@ -46,26 +53,33 @@ const API = {
     resetAll: function() {
       return fetch(`${API.URL}/question/reset`).then(parseJSON);
     },
-    update: function({question_id, group_id, name, description, sort_order}) {
+    update: function({question_id, group_id, name, description, parent_answer_id, sort_order}) {
       return fetch(`${API.URL}/question/${question_id}`, {
         method: "PUT", 
         headers: {
           "Content-Type": "application/json", 
           "Accept":"application/json"
         },
-        body: JSON.stringify({name, group_id, description, sort_order})
+        body: JSON.stringify({name, group_id, description, parent_answer_id, sort_order})
       }).then(parseJSON);
     },
     create: function({group_id, name, description, parent_answer_id, sort_order}) {
+      console.log('stuff', group_id, name, parent_answer_id);
       return fetch(`${API.URL}/question`, {
         method: "POST", 
         headers: {
           "Content-Type": "application/json", 
           "Accept":"application/json"
         },
-        body: JSON.stringify({name, group_id, description, parent_answer_id, sort_order})
+        body: JSON.stringify({group_id, name, description, parent_answer_id, sort_order})
       }).then(parseJSON);
-    }
+    },
+    delete: function(question_id) {
+      return fetch(`${API.URL}/question/${question_id}`, {
+        method: "DELETE", 
+        headers: { "Content-Type": "application/json"}
+      }).then(parseJSON);
+    },
   },
   Import: {
     get: function(import_id) {
@@ -149,6 +163,9 @@ const API = {
     }
   },
   Answer: {
+    get: function(answer_id) {
+      return fetch(`${API.URL}/answer/${answer_id}`).then(parseJSON);
+    },
     update: function({answer_id, name, description, sort_order}) {
       return fetch(`${API.URL}/answer/${answer_id}`, {
         method: "PUT", 
@@ -177,7 +194,13 @@ const API = {
           sort_order,
         })
       }).then(parseJSON);
-    }
+    },
+    delete: function(answer_id) {
+      return fetch(`${API.URL}/answer/${answer_id}`, {
+        method: "DELETE", 
+        headers: { "Content-Type": "application/json"}
+      }).then(parseJSON);
+    },
   },
   Status: {
     // Constants

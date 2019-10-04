@@ -1,9 +1,10 @@
 import React from "react";
-import Question from "./question";
+import { Question } from "./question";
 import QuestionCreateForm from "./question_create_form";
 import { Form, Icon, Popup, Header, Segment, Loader, Dimmer } from "semantic-ui-react";
 import { navigate } from "@reach/router";
 import API from "../../service/api";
+import { DeleteButton } from '../../helpers/delete_button.js';
 
 class Questions extends React.Component {
   constructor(props) {
@@ -77,6 +78,18 @@ class Questions extends React.Component {
     this.loadQuestions(data);
   }
 
+  delete = (e, question_id) => {
+    e.stopPropagation();
+    API.Question.delete(question_id).then(
+      result => {
+        this.reset();
+      },
+      error => {
+        console.log('error', error);
+      }
+    )
+  }
+
   reset = () => {
     // reset question list
     this.loadQuestions();
@@ -92,16 +105,18 @@ class Questions extends React.Component {
       let group = null;
       let parent_count = 0;
 
+      console.log('recurse questions', this.state.questions);
       questions = this.state.questions.map((question) => {
         question.parent_answer_id ? parent_count++ : parent_count = 0; 
         const groupHidden = this.state.hiddenGroups.find((x) => x === question.group.id);
-
         let groupHeader = null;
         if(group !== question.group.name) {
           group = question.group.name;
-          groupHeader = <Segment inverted onClick={() => this.toggleGroup(question.group.id, groupHidden)}><Header size="small">{question.group.name}
-          <Icon name={ groupHidden ? 'angle right' : 'angle down'} />
-          </Header>
+          groupHeader = 
+          <Segment inverted onClick={() => this.toggleGroup(question.group.id, groupHidden)}>
+            <Header size="small">{question.group.name}
+              <Icon name={ groupHidden ? 'angle right' : 'angle down'} /> 
+            </Header>
           </Segment>;
         }
         return (
@@ -111,7 +126,13 @@ class Questions extends React.Component {
             {groupHidden ? null 
             :
             <Segment style={{"marginLeft": parent_count * 50}} onClick={() => this.editQuestion(question.id)} >
-              <Question  question={question} hide_group={true}/>
+              <Question question={question} hide_group={true}>
+                <DeleteButton 
+                  id={question.id}
+                  hasChildren={question.has_children}
+                  delete={this.delete}
+                />
+              </Question>
             </Segment>
             }
           </React.Fragment>
@@ -119,6 +140,10 @@ class Questions extends React.Component {
         });
     }
     return questions;
+  }
+  
+  recurseQuestionSegment(questionArray, question, depth) {
+
   }
 
   toggleGroup(group_id, groupHidden) {
@@ -145,8 +170,6 @@ class Questions extends React.Component {
 
   render() {
     const questions = this.composeQuestionComponent();
-   
-   
     const questionList =   
       this.state.isLoaded  ?
         <React.Fragment>

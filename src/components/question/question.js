@@ -1,13 +1,14 @@
 import React from "react";
 import { Icon, Header, List } from "semantic-ui-react";
 
-function Question(props) {
+export const Question = (props) => {
   return (
     <List>
       <List.Item>
         <Header>
           <Icon name="question circle outline" />
           {props.question.name}
+          {props.children}
         </Header>
       </List.Item>
       <List.Item>Description: {props.question.description}</List.Item>
@@ -19,5 +20,3 @@ function Question(props) {
     </List>
   );
 }
-
-export default Question;

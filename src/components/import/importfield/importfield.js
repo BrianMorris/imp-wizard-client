@@ -4,10 +4,10 @@ import * as Constants from "../../../helpers/constants";
 
 class Importfield extends React.Component {
 
-  handleClick = (e) => {
+  changeFocus = (e) => {
     e.stopPropagation();
     const item_id = this.props.answer_id;
-    this.props.handleClick(Constants.IMPORTFIELD, item_id);
+    this.props.changeFocus(Constants.IMPORTFIELD, item_id);
   }
 
   render() {
@@ -34,7 +34,7 @@ class Importfield extends React.Component {
 
     return(
       <Segment onClick={(e) => {
-        this.handleClick(e);
+        this.changeFocus(e);
         }}>
         <Header>
           Linked Import Fields:

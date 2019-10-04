@@ -1,5 +1,6 @@
 import React from 'react';
 import { Dropdown, Segment, Header, Form } from 'semantic-ui-react';
+import API from '../../service/api';
 
 class ParentChildLinkForm extends React.Component {
   constructor(props) {
@@ -11,12 +12,15 @@ class ParentChildLinkForm extends React.Component {
   }
 
   onDropdownChange = (e, data) => {
+      console.log('first')
       this.setState({
         [data.name]:data.value
-      });
+      }, () => {
+      console.log('after')
       if(data.name === 'activeAnswer') {
         this.props.updateParentAnswer(this.state.activeAnswer);
       }
+    });
   }
 
   mapDropdownOptions(items) {
@@ -31,6 +35,27 @@ class ParentChildLinkForm extends React.Component {
       return questionDropdownOptions;
     }
   }
+
+  componentDidMount() {
+    console.log('lprop', this.props);
+    if(this.props.question && this.props.question.parent_answer_id) {
+      console.log('lpropsssss', this.props);
+      API.Answer.get(this.props.question.parent_answer_id).then(
+        result => {
+          this.setState({
+            activeQuestion: result.question_id,
+            activeAnswer: result.id
+          });
+          console.log('re', result);
+        },
+        error => {
+          console.log('error', error);
+        }
+      );
+      // lookup seed the dropdown
+    }
+  }
+
   render() {
     let questionDropdownOptions = null
     let answerDropdownOptions = null
@@ -46,13 +71,10 @@ class ParentChildLinkForm extends React.Component {
 
         return false;
       });
-      if(questionIndex) {
+      if(questionIndex !== null) {
         answerDropdownOptions = this.mapDropdownOptions(this.props.questions[questionIndex].answers);
       }
     }
-    // console.log('props', this.props);
-    // console.log('questions', this.props.questions);
-    // step 1 control, then pass through
        return (
       <Segment>
         <Header size='small'>
@@ -74,7 +96,10 @@ class ParentChildLinkForm extends React.Component {
             </Form.Field>
             <Form.Field>
               <Dropdown 
-                onChange={this.onDropdownChange} 
+                onChange={(e, data) => {
+                  this.onDropdownChange(e, data);
+                  this.props.onChange();
+                }} 
                 placeholder='Select an answer' 
                 name='activeAnswer'
                 fluid 

@@ -1,5 +1,6 @@
 import React from "react";
 import {Dropdown, Form, Button, Header } from "semantic-ui-react";
+import ParentChildLinkForm from './parent_child_link_form';
 import API from "../../service/api";
 
 class QuestionUpdateForm extends React.Component {
@@ -9,8 +10,10 @@ class QuestionUpdateForm extends React.Component {
       name: this.props.question.name,
       description: this.props.question.description || '',
       group_id: this.props.question.group.id,
+      parent_answer_id: null,
       sort_order: this.props.question.sort_order,
       groupDropdownOptions: [],
+      eligibleParentQuestions: [],
       changed: false
     }
   }
@@ -31,7 +34,12 @@ class QuestionUpdateForm extends React.Component {
     })
   }
 
-  componentDidMount() {
+    componentDidMount() {
+    this.getGroups();
+    this.seedEligibleParentQuestions();
+  }
+
+  getGroups() {
     API.Group.get().then(
       result => {
         this.mapGroupOptions(result);
@@ -40,6 +48,30 @@ class QuestionUpdateForm extends React.Component {
 
       }
     )
+  }
+
+  seedEligibleParentQuestions() {
+    console.log('props', this.props.question.group_id);
+    const group_id = this.props.question.group_id;
+    API.Question.get({group_id}).then(
+      result => {
+        console.log('result', result);
+        const eligibleQuestions = result.filter((question) => question.id !== this.props.question.id);
+        console.log('elgi q', eligibleQuestions)
+        this.setState({
+          eligibleParentQuestions: eligibleQuestions 
+        })
+      },
+      error => {
+        console.log('error is ', error);
+      }
+    );
+  }
+
+  updateParentAnswer = (answer_id) => {
+    this.setState({
+      parent_answer_id: answer_id
+    });
   }
 
   mapGroupOptions(groups) {
@@ -61,6 +93,7 @@ class QuestionUpdateForm extends React.Component {
       question_id: this.props.question.id,
       group_id: this.state.group_id,
       name: this.state.name,
+      parent_answer_id: this.state.parent_answer_id,
       description: this.state.description,
       sort_order: this.state.sort_order
     }).then(
@@ -87,6 +120,12 @@ class QuestionUpdateForm extends React.Component {
 
     return (
       <React.Fragment>
+        <ParentChildLinkForm 
+          question={this.props.question}
+          updateParentAnswer={this.updateParentAnswer}  
+          questions={this.state.eligibleParentQuestions} 
+          onChange={() => this.setState({changed: true})}
+        />
         <Form onSubmit={this.handleSubmit}>
           <Form.Input label='question' onChange={this.onChange} name='name' value={this.state.name} />
           <Form.Input label='description' onChange={this.onChange} name='description' value={this.state.description} />
