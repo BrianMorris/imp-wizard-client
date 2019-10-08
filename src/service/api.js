@@ -31,6 +31,18 @@ const API = {
       return fetch(`${API.URL}/question/reset`).then(parseJSON);
     }
   },
+  Import: {
+    get: function(importId) {
+      return fetch(`${API.URL}/import${importId ? "/" + importId : ""}`).then(parseJSON);
+    },
+    activeFields: function(importId) {
+      return fetch(`${API.URL}/import/${importId}/activefields`).then(parseJSON);
+    },
+    downloadTemplate: function(importId) {
+      return fetch(`${API.URL}/import/${importId}/template`).then(parseJSON);
+    }
+  
+  },
   Status: {
     // Constants
     INACTIVE: 0,

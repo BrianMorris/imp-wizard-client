@@ -4,3 +4,12 @@ body {
   background-repeat: no-repeat;
   background-position: bottom right;
 }
+
+.ui.secondary.pointing.menu a.item:hover {
+  background:rgba(0,0,0,.05);
+  color:rgba(0,0,0,.95);
+}
+
+#import-label{
+  margin-left:0.1em;
+}
