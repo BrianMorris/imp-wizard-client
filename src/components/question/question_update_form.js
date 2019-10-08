@@ -51,13 +51,10 @@ class QuestionUpdateForm extends React.Component {
   }
 
   seedEligibleParentQuestions() {
-    console.log('props', this.props.question.group_id);
     const group_id = this.props.question.group_id;
     API.Question.get({group_id}).then(
       result => {
-        console.log('result', result);
         const eligibleQuestions = result.filter((question) => question.id !== this.props.question.id);
-        console.log('elgi q', eligibleQuestions)
         this.setState({
           eligibleParentQuestions: eligibleQuestions 
         })
@@ -109,15 +106,6 @@ class QuestionUpdateForm extends React.Component {
   
 
   render() {
-
-    let parentButton = null;
-    if(this.props.has_parent) {
-      parentButton = <div>
-          <Header>Parent question info...</Header>
-          <Button>Parent Question</Button>
-        </div>
-    }
-
     return (
       <React.Fragment>
         <ParentChildLinkForm 
@@ -143,12 +131,7 @@ class QuestionUpdateForm extends React.Component {
             </Form.Field>
             <Form.Input width='4' label='Sort Order' onChange={this.onChange} type="number" name='sort_order' min="1" value={this.state.sort_order} />
           </Form.Group>
-          {/* <Form.Field>
-            <label> Parent Question </label>
-            <input placeholder='N/A' />
-          </Form.Field> */}
           <Button disabled={!this.state.changed} primary> Submit</Button>
-          {/* {parentButton} */}
         </Form>
       </React.Fragment>
     );

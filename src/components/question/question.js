@@ -1,12 +1,15 @@
 import React from "react";
-import { Icon, Header, List } from "semantic-ui-react";
+import { Label, Icon, Header, List } from "semantic-ui-react";
 
 export const Question = (props) => {
   return (
     <List>
       <List.Item>
         <Header>
-          <Icon name="question circle outline" />
+          <Label style={{'marginRight':'1.5em'}} circular color="black">
+          <Icon size="big" name="question circle outline" /> 
+            {props.question.id}
+          </Label>
           {props.question.name}
           {props.children}
         </Header>

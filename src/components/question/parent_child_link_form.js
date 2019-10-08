@@ -12,11 +12,9 @@ class ParentChildLinkForm extends React.Component {
   }
 
   onDropdownChange = (e, data) => {
-      console.log('first')
       this.setState({
         [data.name]:data.value
       }, () => {
-      console.log('after')
       if(data.name === 'activeAnswer') {
         this.props.updateParentAnswer(this.state.activeAnswer);
       }
@@ -37,16 +35,13 @@ class ParentChildLinkForm extends React.Component {
   }
 
   componentDidMount() {
-    console.log('lprop', this.props);
     if(this.props.question && this.props.question.parent_answer_id) {
-      console.log('lpropsssss', this.props);
       API.Answer.get(this.props.question.parent_answer_id).then(
         result => {
           this.setState({
             activeQuestion: result.question_id,
             activeAnswer: result.id
           });
-          console.log('re', result);
         },
         error => {
           console.log('error', error);
@@ -57,8 +52,8 @@ class ParentChildLinkForm extends React.Component {
   }
 
   render() {
-    let questionDropdownOptions = null
-    let answerDropdownOptions = null
+    let questionDropdownOptions = null;
+    let answerDropdownOptions = null;
 
     if(this.props.questions) {
       let questionIndex  = null;
@@ -75,7 +70,8 @@ class ParentChildLinkForm extends React.Component {
         answerDropdownOptions = this.mapDropdownOptions(this.props.questions[questionIndex].answers);
       }
     }
-       return (
+
+    return (
       <Segment>
         <Header size='small'>
           Link to parent question

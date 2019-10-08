@@ -102,18 +102,14 @@ class Questions extends React.Component {
   composeQuestionComponent() {
     let questions = null;
     if(this.state.questions) {
-      let group = null;
-      let parent_count = 0;
-
-      console.log('recurse questions', this.state.questions);
+      let group_id = null;
       questions = this.state.questions.map((question) => {
-        question.parent_answer_id ? parent_count++ : parent_count = 0; 
-        const groupHidden = this.state.hiddenGroups.find((x) => x === question.group.id);
+        const groupHidden = this.state.hiddenGroups.find((x) => x === question.group_id);
         let groupHeader = null;
-        if(group !== question.group.name) {
-          group = question.group.name;
+        if(group_id !== question.group_id) {
+          group_id = question.group_id;
           groupHeader = 
-          <Segment inverted onClick={() => this.toggleGroup(question.group.id, groupHidden)}>
+          <Segment inverted onClick={() => this.toggleGroup(question.group_id, groupHidden)}>
             <Header size="small">{question.group.name}
               <Icon name={ groupHidden ? 'angle right' : 'angle down'} /> 
             </Header>
@@ -125,7 +121,7 @@ class Questions extends React.Component {
 
             {groupHidden ? null 
             :
-            <Segment style={{"marginLeft": parent_count * 50}} onClick={() => this.editQuestion(question.id)} >
+            <Segment style={{"marginLeft": question.depth * 50}} onClick={() => this.editQuestion(question.id)} >
               <Question question={question} hide_group={true}>
                 <DeleteButton 
                   id={question.id}
@@ -142,8 +138,14 @@ class Questions extends React.Component {
     return questions;
   }
   
-  recurseQuestionSegment(questionArray, question, depth) {
+  recurseQuestionSegment(questionArray = [], question, depth = 0) {
+      question.child_questions.forEach((child_question) => {
+        this.recurseQuestionSegment(questionArray, child_question, depth + 1)
+      });
+      question.depth = depth;
+      questionArray.push(question);
 
+      return questionArray;
   }
 
   toggleGroup(group_id, groupHidden) {

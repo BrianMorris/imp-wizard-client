@@ -60,7 +60,7 @@ class ImportManager extends React.Component {
         });
       },
       error => {
-        console.log('yo err', error);
+        console.log('err', error);
       }
     );
   }

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Segment, Button, Header } from 'semantic-ui-react';
+import { Label, Segment, Button, Header } from 'semantic-ui-react';
 import ImportfieldLinkForm from "../import/importfield/importfield_link_form";
 import Importfield from "../import/importfield/importfield";
 import Answer from "../answer/answer";
@@ -38,21 +38,29 @@ export class AnswerSegments extends React.Component {
           />
         ;
 
-          let linkedChildButtons = [];
+          let linkedChildButtonGroup = null;
         if(answer.child_questions.length) {
-          linkedChildButtons = answer.child_questions.map((child_question, index) => {
+          let linkedChildButtons = answer.child_questions.map((child_question, index) => {
             return(
-              <Button key={child_question.id} size='tiny' onClick={(e) => this.props.handleQuestionNavigation(e, child_question.id)}>Question id: {child_question.id}</Button>
+              <Label style={{'cursor':'pointer'}} as='button' circular color='blue' key={child_question.id} size='mini' onClick={(e) => this.props.handleQuestionNavigation(e, child_question.id)}> {child_question.id}</Label >
             );
           });
+
+          linkedChildButtonGroup =  
+            // <Button.Group floated='right'>
+            // <React.Fragment floated='right'>
+
+             <Button.Group floated='right'>
+                <Label color='black'>Linked Children:</Label>
+                {linkedChildButtons}
+             </Button.Group>;
+            // </React.Fragment>
         }
-        console.log('answ', answer)
+
         return (
           <Segment key={answer.id} onClick={() => this.props.changeFocus(Constants.ANSWER, answer.id)}>
             <Header>Answer: <DeleteButton id={answer.id} hasChildren={answer.child_questions.length > 0} delete={this.deleteAnswer} /></Header>
-            <Button.Group floated='right'>
-              {linkedChildButtons}
-            </Button.Group>
+            {linkedChildButtonGroup}
             {this.props.focus_constant === Constants.ANSWER && this.props.focus_id === answer.id ? 
               <AnswerUpdateForm 
                 answer={answer} 

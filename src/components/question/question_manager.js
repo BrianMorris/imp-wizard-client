@@ -20,7 +20,6 @@ class QuestionManager extends React.Component {
       questionDetails: {}
     }
     
-    console.log('this.props', this.props);
     this.renderQuestionDetails.bind(this);
     this.changeFocus.bind(this);
   }

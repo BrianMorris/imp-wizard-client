@@ -64,7 +64,6 @@ const API = {
       }).then(parseJSON);
     },
     create: function({group_id, name, description, parent_answer_id, sort_order}) {
-      console.log('stuff', group_id, name, parent_answer_id);
       return fetch(`${API.URL}/question`, {
         method: "POST", 
         headers: {
@@ -199,6 +198,22 @@ const API = {
       return fetch(`${API.URL}/answer/${answer_id}`, {
         method: "DELETE", 
         headers: { "Content-Type": "application/json"}
+      }).then(parseJSON);
+    },
+  },
+  User: {
+    login: function({subdomain, email, password}) {
+      return fetch(`${API.URL}/adminlogin`, {
+        method: "POST", 
+        headers: {
+          "Content-Type": "application/json", 
+          "Accept":"application/json",
+        },
+        body: JSON.stringify({
+          subdomain,
+          email,
+          password
+        })
       }).then(parseJSON);
     },
   },
