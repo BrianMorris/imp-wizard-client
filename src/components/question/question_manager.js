@@ -8,7 +8,7 @@ import API from "../../service/api";
 import { NewAnswerSegment } from "../answer/answer_create_segment";
 import { AnswerSegments } from "../answer/answer_segments";
 
-class QuestionManager extends React.Component {
+export class QuestionManager extends React.Component {
 
   constructor(props) {
     super(props); 
@@ -169,5 +169,3 @@ class QuestionManager extends React.Component {
     );
   }
 }
-
-export default QuestionManager;

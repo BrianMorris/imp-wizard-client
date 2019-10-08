@@ -5,7 +5,7 @@ import ImporttypeItem from './importtype/importtype_item';
 import ImportfieldForm from './importfield/importfield_form';
 import ImporttypeForm from './importtype/importtype_form';
 
-class ImportManager extends React.Component {
+export class ImportManager extends React.Component {
 
   constructor(props) {
     super(props);
@@ -212,5 +212,3 @@ class ImportManager extends React.Component {
     );
   }
 }
-
-export default ImportManager;

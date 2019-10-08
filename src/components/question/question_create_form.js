@@ -1,5 +1,5 @@
 import React from "react";
-import { Segment, Dropdown, Form, Button, Header } from "semantic-ui-react";
+import { Segment, Dropdown, Form, Button } from "semantic-ui-react";
 import API from "../../service/api";
 import ParentChildLinkForm from './parent_child_link_form';
 
@@ -88,14 +88,6 @@ class QuestionCreateForm extends React.Component {
 
   render() {
 
-    let parentButton = null;
-    if(this.props.has_parent) {
-      parentButton = <div>
-          <Header>Parent question info...</Header>
-          <Button>Parent Question</Button>
-        </div>
-    }
-
     return (
       <React.Fragment>
         <Segment>
@@ -121,12 +113,7 @@ class QuestionCreateForm extends React.Component {
               </Form.Field>
               <Form.Input width='4' label='Sort Order' onChange={this.onChange} type="number" name='sort_order' min="1" value={this.state.sort_order} />
             </Form.Group>
-            {/* <Form.Field>
-              <label> Parent Question </label>
-              <input placeholder='N/A' />
-            </Form.Field> */}
             <Button disabled={!this.state.changed} primary> Submit</Button>
-            {/* {parentButton} */}
           </Form>
         </Segment>
       </React.Fragment>

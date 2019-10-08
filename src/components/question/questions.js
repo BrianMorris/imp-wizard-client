@@ -6,7 +6,7 @@ import { navigate } from "@reach/router";
 import API from "../../service/api";
 import { DeleteButton } from '../../helpers/delete_button.js';
 
-class Questions extends React.Component {
+export class Questions extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -220,5 +220,3 @@ class Questions extends React.Component {
     );
   }
 }
-
-export default Questions;

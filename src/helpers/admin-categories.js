@@ -21,7 +21,7 @@ const adminCategories = [
   //   "id": 3,
   //   "title":"imports",
   //   "description": "Create, update, or delete imports",
-  //   "route":"linkage"
+  //   "route":"imports"
   // },
   {
     "id": 5,

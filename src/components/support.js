@@ -1,7 +1,7 @@
 import React from "react";
 import { Segment, Header } from "semantic-ui-react";
 
-class Support extends React.Component {
+export class Support extends React.Component {
   render() {
     return(
       <Segment>
@@ -11,5 +11,3 @@ class Support extends React.Component {
       );
   }
 }
-
-export default Support ;

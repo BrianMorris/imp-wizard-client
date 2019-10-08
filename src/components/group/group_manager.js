@@ -2,7 +2,8 @@ import React from "react";
 import { List, Segment, Header } from 'semantic-ui-react';
 import API from "../../service/api";
 import GroupForm from './group_form';
-class GroupManager extends React.Component {
+
+export class GroupManager extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -95,5 +96,3 @@ class GroupManager extends React.Component {
     );
   }
 }
-
-export default GroupManager;
