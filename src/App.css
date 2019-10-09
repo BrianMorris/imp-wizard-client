@@ -13,3 +13,60 @@ body {
 #import-label{
   margin-left:0.1em;
 }
+
+#rail {
+  top:100%;
+}
+
+button > i.cancelIcon {
+   margin-right: -.81428571em !important;
+}
+
+.segment, .cancelIcon {
+  cursor: pointer;
+}
+
+.ui.horizontal.list>.item {
+  margin-left:0;
+}
+
+.noClick, button.ui.noClick {
+  cursor: text
+}
+
+.ui.toggle.checkbox[class*="right floated"] {
+  float: right !important;
+  margin-right: 0em !important;
+  margin-left: 1em !important;
+} 
+
+.ui.list .list>.item .header, .ui.list>.item .header.listHeader {
+  display:inline-block;
+}
+
+.popup {
+  opacity: 0.9;
+  padding: '1em';
+}
+
+#plusIconButton {
+  margin-left:1em;
+  font-size:.65em;
+  background-color: #1b1c1d;
+  cursor:pointer;
+}
+
+.ui.header>.icon.deleteButton{
+  margin-right:0;
+  float:right;
+  font-size: 1em;
+}
+
+#backButton {
+  margin-left:0.25em;
+  margin-bottom:0.25em;
+}
+
+.ui.segment.warning {
+  background-color:lightcoral;
+}

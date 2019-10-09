@@ -2,8 +2,8 @@ import React from "react";
 import "semantic-ui-css/semantic.min.css";
 import "./App.css";
 import { Router } from "@reach/router";
-import Login from "./page/login";
-import Layout from "./page/layout";
+import { Login } from "./components/page/login.js";
+import { PrivateRoutes } from "./helpers/privateRoutes.js";
 
 class App extends React.Component {
   render() {
@@ -11,7 +11,7 @@ class App extends React.Component {
       <React.Fragment>
         <Router>
           <Login path="/login" />
-          <Layout path="/*" />
+          <PrivateRoutes path="/*" />
         </Router> 
       </React.Fragment>
     );

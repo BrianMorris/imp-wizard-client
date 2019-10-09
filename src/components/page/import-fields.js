@@ -1,6 +1,6 @@
 import React from "react";
 import {Container, Header, List, Button, Segment} from "semantic-ui-react";
-import API from "../service/api";
+import API from "../../service/api";
 
 class ImportFields extends React.Component {
   constructor(props) {

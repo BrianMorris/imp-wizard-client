@@ -1,8 +1,8 @@
 import React from "react";
-import Question from "../component/question";
+import Question from "../question";
 import { Grid, Segment, Loader, Dimmer } from "semantic-ui-react";
 import { navigate } from "@reach/router";
-import API from "../service/api";
+import API from "../../service/api";
 
 class GroupQuestion extends React.Component {
   constructor(props) {

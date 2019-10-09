@@ -1,8 +1,8 @@
 import React from "react";
 import { Header, Segment, Dimmer, Loader } from "semantic-ui-react";
 import { navigate } from "@reach/router";
-import Group from "../component/group";
-import API from "../service/api";
+import Group from "../group";
+import API from "../../service/api";
 
 class Home extends React.Component {
   constructor(props) {
@@ -38,7 +38,7 @@ class Home extends React.Component {
         });
 
         if(activeImports && activeImports.length) {
-          this.completeImport();
+          this.props.completeImport();
         }
       }
     );
@@ -46,6 +46,7 @@ class Home extends React.Component {
   }
 
   routeToQuestion(groupId) {
+    console.log('routing', groupId);
     API.Group.getNextQuestion(groupId).then(
       result => {
         if (result) {
@@ -60,11 +61,8 @@ class Home extends React.Component {
     );
   }
 
-  completeImport() {
-    this.props.completeImport();
-  }
-
   render() {
+    console.log('this.state.groups', this.state.groups);
     const groupElement = this.state.isLoaded 
     ? 
       (<Segment.Group>

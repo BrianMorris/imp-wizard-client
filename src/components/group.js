@@ -1,5 +1,5 @@
 import React from "react";
-import { Segment, Header, Icon } from "semantic-ui-react";
+import { Segment, Header, Icon, Popup } from "semantic-ui-react";
 import API from "../service/api";
 
 class Group extends React.Component {
@@ -22,6 +22,7 @@ class Group extends React.Component {
   }
 
   render() {
+    const disabled = this.props.group.question_count < 1;
     return (
       <Segment
         style={{ cursor: "pointer" }}
@@ -29,6 +30,7 @@ class Group extends React.Component {
         onClick={() => {
           this.props.onGroupSelect(this.props.group);
         }}
+        disabled={disabled}
         onMouseEnter={() => {
           this.setState({
             isHovering: true
@@ -40,10 +42,17 @@ class Group extends React.Component {
           });
         }}
       >
-        <Header>
-          {this.props.group.name}
-          {this.state.isHovering ? <Icon name="angle right" style={{ float: "right" }} /> : ""}
-        </Header>
+        <Popup
+          className='popup'
+          inverted
+          content={disabled ? 'no valid questions for this group' : 'go to group questions'}
+          trigger={
+            <Header>
+              {this.props.group.name}
+              {this.state.isHovering ? <Icon name="angle right" style={{ float: "right" }} /> : ""}
+            </Header>
+          }
+        />
       </Segment>
     );
   }

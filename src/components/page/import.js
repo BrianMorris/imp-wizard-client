@@ -1,9 +1,8 @@
 import React from "react";
 import {Container, Header, Segment, Dimmer, Loader } from "semantic-ui-react";
 import { navigate } from "@reach/router";
-import ImportGroup from "../component/import-group";
-import API from "../service/api";
-import AppNav from "../component/app-nav";
+import ImportGroup from "../import-group";
+import API from "../../service/api";
 
 class Import extends React.Component {
   constructor(props) {

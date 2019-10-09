@@ -43,6 +43,22 @@ const API = {
     }
   
   },
+  User: {
+    login: function({subdomain, email, password}) {
+      return fetch(`${API.URL}/login`, {
+        method: "POST", 
+        headers: {
+          "Content-Type": "application/json", 
+          "Accept":"application/json",
+        },
+        body: JSON.stringify({
+          subdomain,
+          email,
+          password
+        })
+      }).then(parseJSON);
+    },
+  },
   Status: {
     // Constants
     INACTIVE: 0,

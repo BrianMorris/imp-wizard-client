@@ -12,13 +12,22 @@ class AppNav extends React.Component {
     }
   }
 
+  handleLogin = () => {
+    if(this.props.logged_in) {
+      this.props.handleLogout();
+    }
+    else {
+      navigate('/login');
+    }
+  }
+
   componentWillReceiveProps(nextProps) {
     this.setState({
       activeImports: nextProps.completedImport
     });
   }
+
   render() {
-    // adding a import label to notify user when there are valid imports available for download
     const importLabel = this.state.activeImports ? <Label id="import-label" circular color="green" empty key="green" /> : null;
 
     return (
@@ -51,13 +60,11 @@ class AppNav extends React.Component {
         </Menu.Item>
 
         <Menu.Item
-          name="logout"
+          name="login"
           position="right"
-          onClick={() => {
-            navigate("/login");
-          }}
+          onClick={this.handleLogin}
         >
-          Logout
+          {this.props.logged_in ? 'logout' : 'login'}  
         </Menu.Item>
       </Menu>
     );

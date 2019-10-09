@@ -2,7 +2,7 @@ import React from "react";
 import { Router } from "@reach/router";
 import Home from "./home";
 import GroupQuestion from "./group-question";
-import AppNav from "../component/app-nav";
+import AppNav from "../app-nav";
 import { Container } from "semantic-ui-react";
 import Import from "./import";
 import ImportFields from "./import-fields";
