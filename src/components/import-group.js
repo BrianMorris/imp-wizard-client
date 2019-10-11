@@ -9,7 +9,7 @@ class ImportGroup extends Group {
       <Segment
         style={ready_to_download ? { cursor: "pointer" } : null}
         color={this.getStatusColor(ready_to_download)}
-        className={ready_to_download  ? "" : "disabled"}
+        disabled={!ready_to_download}
         onClick={() => {
           if(ready_to_download) {
             this.props.onGroupSelect(this.props.group);

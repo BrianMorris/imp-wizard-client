@@ -7,8 +7,8 @@ const parseJSON = function(response) {
 const API = {
   URL: "http://localhost:8000",
   Group: {
-    get: function(groupId) {
-      return fetch(`${API.URL}/group${groupId ? "/" + groupId : ""}`).then(parseJSON);
+    getImplementationGroups: function(groupId) {
+      return fetch(`${API.URL}/implementationgroup${groupId ? "/" + groupId : ""}`).then(parseJSON);
     },
     getNextQuestion: function(groupId) {
       return fetch(`${API.URL}/group/${groupId}/nextquestion`).then(parseJSON);

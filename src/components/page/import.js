@@ -34,11 +34,11 @@ class Import extends React.Component {
   render() {
     const importGroupElement = this.state.isLoaded 
     ? 
-      (<Segment.Group>
+      (<Segment>
         {this.state.groups.map((group, index) => {
           return <ImportGroup group={group} key={index} onGroupSelect={() => navigate(`/import/${group.id}/activefields`, { state : {importtype: group.name}})} />
         })}
-      </Segment.Group>)
+      </Segment>)
     :
       (<Segment style={{ minHeight: 200 }}>
         <Dimmer active inverted>
@@ -50,7 +50,7 @@ class Import extends React.Component {
     return (
       <React.Fragment>
         <Container>
-          <Header>Select a category below:</Header>
+          <Header textAlign='center'>Select an import below:</Header>
           {importGroupElement}
         </Container>
       </React.Fragment>

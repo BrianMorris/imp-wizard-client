@@ -1,14 +1,18 @@
 import React from "react";
-import { Menu, Label } from "semantic-ui-react";
+import { Header, Menu, Label } from "semantic-ui-react";
 import { navigate } from "@reach/router";
 import API from "../service/api";
+import UserContext from '../userContext.js';
 
 class AppNav extends React.Component {
+  static contextType = UserContext
+
   constructor(props) {
     super(props);
 
     this.state = {
-      activeImports:false
+      activeImports:false,
+      company:''
     }
   }
 
@@ -28,11 +32,12 @@ class AppNav extends React.Component {
   }
 
   render() {
+    const companyName = this.context && this.context.company ? '| ' + this.context.company : null; 
     const importLabel = this.state.activeImports ? <Label id="import-label" circular color="green" empty key="green" /> : null;
 
     return (
       <Menu pointing secondary>
-        <Menu.Item header>LIZARD</Menu.Item>
+        <Menu.Item header>LIZARD {companyName}</Menu.Item>
         <Menu.Item
           onClick={() => {
             navigate("/");

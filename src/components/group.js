@@ -17,7 +17,7 @@ class Group extends React.Component {
       case API.Status.COMPLETE:
         return "green";
       default:
-        return "grey";
+        return "black";
     }
   }
 

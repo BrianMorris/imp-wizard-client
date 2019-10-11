@@ -3,8 +3,10 @@ import Cookie from 'js-cookie';
 import { navigate } from "@reach/router";
 import { Grid, Header, Form, Segment, Button } from "semantic-ui-react";
 import API from '../../service/api';
+import UserContext from '../../userContext.js';
 
 export class Login extends React.Component {
+  static contextType = UserContext
   constructor(props) {
     super(props);
     this.state = {
@@ -50,6 +52,7 @@ export class Login extends React.Component {
 
   handleSuccessfulLogin(result) {
     Cookie.set('session_token', result.session_token);
+    this.context.setCompany(this.state.subdomain);
     navigate("/");
   }
 

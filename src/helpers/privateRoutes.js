@@ -15,7 +15,8 @@ export class PrivateRoutes extends React.Component {
     super(props);
     this.state = {
       session_token:null,
-      logged_in:false
+      logged_in:false,
+      completedImport: false
     }
   }
 
@@ -37,14 +38,19 @@ export class PrivateRoutes extends React.Component {
     }
   }
 
-
+  updateImportState() {
+    if(!this.state.completedImport) {
+      this.setState({
+        completedImport:true
+      });
+    }
+  } 
 
   handleLogin = () => {
     this.toggleLogin(true); 
   }
 
   handleLogout = () => {
-    console.log('logging out');
     // hit api with logout
     this.toggleLogin(false);
     Cookie.remove('session_token');
@@ -57,14 +63,14 @@ export class PrivateRoutes extends React.Component {
     });
   }
 
+
   render() {
-    console.log('sess', this.state.session_token)
     if(!this.state.session_token) {
-      return <Login />
+      return <Login/>
     }
     return (
       <React.Fragment>
-        <AppNav handleLogin={this.handleLogin} handleLogout={this.handleLogout} logged_in={this.state.logged_in} />
+        <AppNav completedImport={this.state.completedImport} handleLogin={this.handleLogin} handleLogout={this.handleLogout} logged_in={this.state.logged_in} />
         <Grid centered columns={3}>
           <Grid.Column width={12}>
             <Router>

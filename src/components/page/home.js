@@ -15,7 +15,7 @@ class Home extends React.Component {
   }
 
  componentDidMount() {
-    API.Group.get().then(
+    API.Group.getImplementationGroups().then(
       result => {
         this.setState({
           isLoaded: true,
@@ -36,7 +36,6 @@ class Home extends React.Component {
         let activeImports = result.filter((item) => {
           return item.ready_to_download;
         });
-
         if(activeImports && activeImports.length) {
           this.props.completeImport();
         }
@@ -46,7 +45,6 @@ class Home extends React.Component {
   }
 
   routeToQuestion(groupId) {
-    console.log('routing', groupId);
     API.Group.getNextQuestion(groupId).then(
       result => {
         if (result) {
@@ -62,14 +60,13 @@ class Home extends React.Component {
   }
 
   render() {
-    console.log('this.state.groups', this.state.groups);
     const groupElement = this.state.isLoaded 
     ? 
-      (<Segment.Group>
+      (<Segment>
         {this.state.groups.map((group, index) => {
           return <Group group={group} key={index} onGroupSelect={() => this.routeToQuestion(group.id)} />
         })}
-      </Segment.Group>)
+      </Segment>)
     :
       (<Segment style={{ minHeight: 200 }}>
         <Dimmer active inverted>
@@ -79,7 +76,7 @@ class Home extends React.Component {
 
     return (
       <React.Fragment>
-        <Header>Select a category below:</Header>
+        <Header textAlign='center'>Select a category below:</Header>
           {groupElement}
       </React.Fragment>
     );
