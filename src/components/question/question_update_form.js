@@ -1,7 +1,8 @@
 import React from "react";
 import {Dropdown, Form, Button } from "semantic-ui-react";
 import ParentChildLinkForm from './parent_child_link_form';
-import API from "../../service/api";
+import { API } from "../../service/api";
+import { errorHandler } from "../../service/errorHandler";
 
 class QuestionUpdateForm extends React.Component {
   constructor(props) {
@@ -45,7 +46,7 @@ class QuestionUpdateForm extends React.Component {
         this.mapGroupOptions(result);
       },
       error => {
-
+        errorHandler(error);
       }
     )
   }
@@ -60,7 +61,7 @@ class QuestionUpdateForm extends React.Component {
         })
       },
       error => {
-        console.log('error is ', error);
+        errorHandler(error);
       }
     );
   }
@@ -98,8 +99,7 @@ class QuestionUpdateForm extends React.Component {
         this.props.reset();
       },
       error => {
-        // handle errors better later
-        console.log('err', error);
+        errorHandler(error);
       }
     )
  }

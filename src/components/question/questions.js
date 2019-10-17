@@ -3,7 +3,8 @@ import { Question } from "./question";
 import QuestionCreateForm from "./question_create_form";
 import { Form, Icon, Popup, Header, Segment, Loader, Dimmer } from "semantic-ui-react";
 import { navigate } from "@reach/router";
-import API from "../../service/api";
+import { API }  from "../../service/api";
+import { errorHandler } from '../../service/errorHandler';
 import { DeleteButton } from '../../helpers/delete_button.js';
 
 export class Questions extends React.Component {
@@ -43,6 +44,7 @@ export class Questions extends React.Component {
           error: error,
           isLoaded: true
         });
+        errorHandler(error);
       }
     );
   }
@@ -85,7 +87,7 @@ export class Questions extends React.Component {
         this.reset();
       },
       error => {
-        console.log('error', error);
+        errorHandler(error);
       }
     )
   }

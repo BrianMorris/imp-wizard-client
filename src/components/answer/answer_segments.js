@@ -5,7 +5,8 @@ import Importfield from "../import/importfield/importfield";
 import Answer from "../answer/answer";
 import { AnswerUpdateForm } from "../answer/answer_update_form";
 import { DeleteButton } from "../../helpers/delete_button.js";
-import API from '../../service/api';
+import { API } from '../../service/api';
+import { errorHandler } from '../../service/errorHandler';
 import * as Constants from "../../helpers/constants";
 
 export class AnswerSegments extends React.Component {
@@ -17,7 +18,7 @@ export class AnswerSegments extends React.Component {
         this.props.reset();
       },
       error => {
-        console.log('handle erorr', error);
+        errorHandler(error);
       }
     );
   }

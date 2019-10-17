@@ -1,6 +1,7 @@
 import React from "react";
 import { Popup, Icon, Form, Dropdown, List, Header, Segment, Button } from "semantic-ui-react";
-import API from '../../../service/api';
+import { API } from '../../../service/api';
+import { errorHandler } from "../../../service/errorHandler";
 
 class ImportfieldLinkForm extends React.Component {
   constructor(props) {
@@ -31,7 +32,7 @@ class ImportfieldLinkForm extends React.Component {
         });
       },
       error => {
-        console.log('yo err', error);
+        errorHandler(error);
       }
     );
   }
@@ -59,7 +60,7 @@ class ImportfieldLinkForm extends React.Component {
         });
       },
       error => {
-        console.log('some eerrs', error);
+        errorHandler(error);
       }
     )
   }

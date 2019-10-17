@@ -1,6 +1,7 @@
 import React from "react";
 import { Form, Dropdown } from "semantic-ui-react";
-import API from '../../../service/api';
+import { API } from '../../../service/api';
+import { errorHandler } from "../../../service/errorHandler";
 
 class ImporttypeDropdown extends React.Component {
   constructor(props) {
@@ -36,7 +37,7 @@ class ImporttypeDropdown extends React.Component {
         });
       },
       error => {
-        console.log('yo err', error);
+        errorHandler(error);
       }
     );
   }

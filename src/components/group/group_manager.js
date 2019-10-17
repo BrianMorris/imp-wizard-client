@@ -1,6 +1,7 @@
 import React from "react";
 import { List, Segment, Header } from 'semantic-ui-react';
-import API from "../../service/api";
+import { API } from "../../service/api";
+import { errorHandler } from '../../service/errorHandler';
 import GroupForm from './group_form';
 
 export class GroupManager extends React.Component {
@@ -25,7 +26,7 @@ export class GroupManager extends React.Component {
         })
       },
       error => {
-
+        errorHandler(error);
       }
     ) 
   }
@@ -40,7 +41,7 @@ export class GroupManager extends React.Component {
         this.getGroups();
       },
       error => {
-
+        errorHandler(error);
       }
     )
   }

@@ -4,7 +4,8 @@ import { Icon, Popup, Loader, Dimmer, Label, Rail, Segment, Header } from "seman
 import { Question } from "./question";
 import QuestionUpdateForm from "./question_update_form";
 import * as Constants from "../../helpers/constants";
-import API from "../../service/api";
+import { API } from "../../service/api";
+import { errorHandler } from '../../service/errorHandler';
 import { NewAnswerSegment } from "../answer/answer_create_segment";
 import { AnswerSegments } from "../answer/answer_segments";
 
@@ -45,6 +46,7 @@ export class QuestionManager extends React.Component {
         this.setState({
           isLoaded: true
         });
+        errorHandler(error);
       }); }
   
   changeFocus(item_constant, item_id) {
@@ -65,7 +67,7 @@ export class QuestionManager extends React.Component {
         this.renderAnswerImportfields(importfield_id, answerIndex);
       },
       error => {
-        console.log('err', error);
+        errorHandler(error);
       }
     );
   }
@@ -77,7 +79,7 @@ export class QuestionManager extends React.Component {
         this.renderQuestionDetails(this.props.id);
       },
       error => {
-        console.log('er', error);
+        errorHandler(error);
       }
     )
   }

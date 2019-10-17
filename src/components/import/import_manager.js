@@ -1,6 +1,7 @@
 import React from "react";
 import { Header, Segment, List } from "semantic-ui-react";
-import API from '../../service/api';
+import { API } from '../../service/api';
+import { errorHandler } from '../../service/errorHandler';
 import ImporttypeItem from './importtype/importtype_item';
 import ImportfieldForm from './importfield/importfield_form';
 import ImporttypeForm from './importtype/importtype_form';
@@ -45,22 +46,23 @@ export class ImportManager extends React.Component {
   getImporttypes() {
     API.Importtype.get().then(
       result => {
-        // TODO: make the importtype field default value link to a group by adding a group column
-        let importDropdownOptions = result.map((field, index) => {
-          field.text = field.name;
-          field.key = field.id;
-          // field.active = null;
-          field.value = field.id
-          return field;
-        });
-        
-        this.setState({
-          // importDropdownOptions: importDropdownOptions
-          importtypes: importDropdownOptions 
-        });
+          // TODO: make the importtype field default value link to a group by adding a group column
+          let importDropdownOptions = result.map((field, index) => {
+            field.text = field.name;
+            field.key = field.id;
+            // field.active = null;
+            field.value = field.id
+            return field;
+          });
+          
+          this.setState({
+            // importDropdownOptions: importDropdownOptions
+            importtypes: importDropdownOptions 
+          });
       },
       error => {
-        console.log('err', error);
+        console.log('ya', error)
+        errorHandler(error);
       }
     );
   }
@@ -84,7 +86,7 @@ export class ImportManager extends React.Component {
         })
       },
       error => {
-
+        errorHandler(error);
       }
     )
   }
@@ -109,7 +111,7 @@ export class ImportManager extends React.Component {
         this.resetForms();
       },
       error => {
-
+        errorHandler(error);
       }
     )
   }
@@ -124,7 +126,7 @@ export class ImportManager extends React.Component {
         this.resetForms();
       },
       error => {
-        console.log('error', error);
+        errorHandler(error);
       }
     )
   }
@@ -135,7 +137,7 @@ export class ImportManager extends React.Component {
         this.getImporttypes();
       },
       error => {
-        console.log('error', error);
+        errorHandler(error);
       }
     )
   }

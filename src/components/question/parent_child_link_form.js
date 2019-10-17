@@ -1,6 +1,7 @@
 import React from 'react';
 import { Dropdown, Segment, Header, Form } from 'semantic-ui-react';
-import API from '../../service/api';
+import { API } from '../../service/api';
+import { errorHandler } from '../../service/errorHandler';
 
 class ParentChildLinkForm extends React.Component {
   constructor(props) {
@@ -44,7 +45,7 @@ class ParentChildLinkForm extends React.Component {
           });
         },
         error => {
-          console.log('error', error);
+          errorHandler(error);
         }
       );
       // lookup seed the dropdown

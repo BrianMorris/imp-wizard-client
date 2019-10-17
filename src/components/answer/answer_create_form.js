@@ -1,6 +1,7 @@
 import React from "react";
 import { Button, Form } from "semantic-ui-react";
-import API from "../../service/api";
+import { API } from "../../service/api";
+import { errorHandler } from '../../service/errorHandler';
 
 export class AnswerCreateForm extends React.Component{
     constructor(props) {
@@ -45,7 +46,7 @@ export class AnswerCreateForm extends React.Component{
         this.reset();
       },
       error => {
-        console.log('err', error);
+        errorHandler(error);
       }
     )
   }

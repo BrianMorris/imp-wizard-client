@@ -26,10 +26,8 @@ class AppNav extends React.Component {
       activeImports: nextProps.completedImport
     });
   }
+
   render() {
-
-    // adding a import label to notify user when there are valid imports available for download
-
     return (
       <Menu pointing secondary>
         <Menu.Item header>LIZARD</Menu.Item>
