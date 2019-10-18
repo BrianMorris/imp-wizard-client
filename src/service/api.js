@@ -1,5 +1,6 @@
 import Cookie from 'js-cookie';
 import { navigate } from '@reach/router';
+
 const parseJSON = function(response) {
   if(response.status >= 400) {
     throw new Error(response.status);
@@ -12,7 +13,8 @@ const parseJSON = function(response) {
 
 
 export const API = {
-  API_AUTH: {
+  URL: "http://ec2-54-67-52-72.us-west-1.compute.amazonaws.com",
+  AUTH: {
     setSessionToken(url) {
     // add session token
     const session_token = Cookie.get('session_token');
@@ -22,19 +24,18 @@ export const API = {
     return url + '?session_token=' + session_token;
     }
   },
-  URL: "http://localhost:8000",
   Group: {
     get: function(groupId) {
       const url = `${API.URL}/group${groupId ? "/" + groupId : ""}`;
-      return fetch(API.API_AUTH.setSessionToken(url)).then(parseJSON);
+      return fetch(API.AUTH.setSessionToken(url)).then(parseJSON);
     },
     getNextQuestion: function(groupId) {
       const url = `${API.URL}/group/${groupId}/nextquestion`;
-      return fetch(API.API_AUTH.setSessionToken(url)).then(parseJSON);
+      return fetch(API.AUTH.setSessionToken(url)).then(parseJSON);
     },
     create: function({name, description, active}) {
       const url = `${API.URL}/group`;
-      return fetch(API.API_AUTH.setSessionToken(url), {
+      return fetch(API.AUTH.setSessionToken(url), {
         method: "POST", 
         headers: {
           "Content-Type": "application/json", 
@@ -56,20 +57,20 @@ export const API = {
       if(question_id) {
 
         const url = `${API.URL}/question${question_id ? "/" + question_id : ""}`;
-        return fetch(API.API_AUTH.setSessionToken(url) + queryStringParameters).then(parseJSON);
+        return fetch(API.AUTH.setSessionToken(url) + queryStringParameters).then(parseJSON);
       }
       else {
         const url = `${API.URL}/adminquestion`;
-        return fetch(API.API_AUTH.setSessionToken(url) + queryStringParameters).then(parseJSON);
+        return fetch(API.AUTH.setSessionToken(url) + queryStringParameters).then(parseJSON);
       }
     },
     getDetail: function(question_id) {
       const url = `${API.URL}/question/${question_id}/detail`;
-      return fetch(API.API_AUTH.setSessionToken(url)).then(parseJSON);
+      return fetch(API.AUTH.setSessionToken(url)).then(parseJSON);
     },
     postAnswer: function(question_id, answer_id) {
       const url = `${API.URL}/question/${question_id}/answer`
-      return fetch(API.API_AUTH.setSessionToken(url), {
+      return fetch(API.AUTH.setSessionToken(url), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -79,11 +80,11 @@ export const API = {
     },
     resetAll: function() {
       const url = `${API.URL}/question/reset`;
-      return fetch(API.API_AUTH.setSessionToken(url)).then(parseJSON);
+      return fetch(API.AUTH.setSessionToken(url)).then(parseJSON);
     },
     update: function({question_id, group_id, name, description, parent_answer_id, sort_order}) {
       const url = `${API.URL}/question/${question_id}`;
-      return fetch(API.API_AUTH.setSessionToken(url), {
+      return fetch(API.AUTH.setSessionToken(url), {
         method: "PUT", 
         headers: {
           "Content-Type": "application/json", 
@@ -94,7 +95,7 @@ export const API = {
     },
     create: function({group_id, name, description, parent_answer_id, sort_order}) {
       const url = `${API.URL}/question`;
-      return fetch(API.API_AUTH.setSessionToken(url), {
+      return fetch(API.AUTH.setSessionToken(url), {
         method: "POST", 
         headers: {
           "Content-Type": "application/json", 
@@ -105,7 +106,7 @@ export const API = {
     },
     delete: function(question_id) {
       const url = `${API.URL}/question/${question_id}`;
-      return fetch(API.API_AUTH.setSessionToken(url), {
+      return fetch(API.AUTH.setSessionToken(url), {
         method: "DELETE", 
         headers: { "Content-Type": "application/json"}
       }).then(parseJSON);
@@ -114,25 +115,25 @@ export const API = {
   Import: {
     get: function(import_id) {
       const url = `${API.URL}/import${import_id ? "/" + import_id : ""}`;
-      return fetch(API.API_AUTH.setSessionToken(url)).then(parseJSON);
+      return fetch(API.AUTH.setSessionToken(url)).then(parseJSON);
     },
     activeFields: function(import_id) {
       const url = `${API.URL}/import/${import_id}/activefields`;
-      return fetch(API.API_AUTH.setSessionToken(url)).then(parseJSON);
+      return fetch(API.AUTH.setSessionToken(url)).then(parseJSON);
     },
     downloadTemplate: function(import_id) {
       const url = `${API.URL}/import/${import_id}/template`;
-      return fetch(API.API_AUTH.setSessionToken(url)).then(parseJSON);
+      return fetch(API.AUTH.setSessionToken(url)).then(parseJSON);
     },
   },
   Importtype: {
     get: function(active = null) {
       const url = `${API.URL}/importtype`;
-      return fetch(API.API_AUTH.setSessionToken(url) + `${active === null ? '' : '&active=' + active}`).then(parseJSON);
+      return fetch(API.AUTH.setSessionToken(url) + `${active === null ? '' : '&active=' + active}`).then(parseJSON);
     },
     create: function({name, description, active}) {
       const url = `${API.URL}/importtype`;
-      return fetch(API.API_AUTH.setSessionToken(url), {
+      return fetch(API.AUTH.setSessionToken(url), {
         method: "POST", 
         headers: {
           "Content-Type": "application/json",
@@ -147,7 +148,7 @@ export const API = {
     },
     update: function(importtype_id, {name, description, active}) {
       const url = `${API.URL}/importtype/${importtype_id}`;
-      return fetch(API.API_AUTH.setSessionToken(url), {
+      return fetch(API.AUTH.setSessionToken(url), {
         method: "PUT", 
         headers: {
           "Content-Type": "application/json",
@@ -164,14 +165,14 @@ export const API = {
   Importfield: {
     unlink: function(answer_id, importfield_id) {
       const url = `${API.URL}/answer/${answer_id}/importfield/${importfield_id}`;
-      return fetch(API.API_AUTH.setSessionToken(url), {
+      return fetch(API.AUTH.setSessionToken(url), {
         method: "DELETE", 
         headers: { "Content-Type": "application/json"}
       }).then(parseJSON);
     },
     link: function(answer_id, importfield_id) {
       const url = `${API.URL}/answer/${answer_id}/importfield`;
-      return fetch(API.API_AUTH.setSessionToken(url), {
+      return fetch(API.AUTH.setSessionToken(url), {
         method: "POST", 
         headers: { "Content-Type": "application/json"},
         body: JSON.stringify({
@@ -181,7 +182,7 @@ export const API = {
     },
     create: function({importtype_id, name, description}) {
       const url = `${API.URL}/importfield`;
-      return fetch(API.API_AUTH.setSessionToken(url), {
+      return fetch(API.AUTH.setSessionToken(url), {
         method: "POST", 
         headers: {
           "Content-Type": "application/json",
@@ -196,21 +197,21 @@ export const API = {
     }, 
     getAnswerFields: function(answer_id) {
       const url = `${API.URL}/answer/${answer_id}/importfield`;
-      return fetch(API.API_AUTH.setSessionToken(url)).then(parseJSON);
+      return fetch(API.AUTH.setSessionToken(url)).then(parseJSON);
     }, 
     get: function(importtype_id) {
       const url = `${API.URL}/importfield`;
-      return fetch(API.API_AUTH.setSessionToken(url) + `&importtype_id=${importtype_id}`).then(parseJSON);
+      return fetch(API.AUTH.setSessionToken(url) + `&importtype_id=${importtype_id}`).then(parseJSON);
     }
   },
   Answer: {
     get: function(answer_id) {
       const url = `${API.URL}/answer/${answer_id}`;
-      return fetch(API.API_AUTH.setSessionToken(url)).then(parseJSON);
+      return fetch(API.AUTH.setSessionToken(url)).then(parseJSON);
     },
     update: function({answer_id, name, description, sort_order}) {
       const url = `${API.URL}/answer/${answer_id}`;
-      return fetch(API.API_AUTH.setSessionToken(url), {
+      return fetch(API.AUTH.setSessionToken(url), {
         method: "PUT", 
         headers: {
           "Content-Type": "application/json", 
@@ -225,7 +226,7 @@ export const API = {
     },
     create: function({question_id, name, description, sort_order}) {
       const url = `${API.URL}/answer`;
-      return fetch(API.API_AUTH.setSessionToken(url), {
+      return fetch(API.AUTH.setSessionToken(url), {
         method: "POST", 
         headers: {
           "Content-Type": "application/json", 
@@ -241,7 +242,7 @@ export const API = {
     },
     delete: function(answer_id) {
       const url = `${API.URL}/answer/${answer_id}`;
-      return fetch(API.API_AUTH.setSessionToken(url), {
+      return fetch(API.AUTH.setSessionToken(url), {
         method: "DELETE", 
         headers: { "Content-Type": "application/json"}
       }).then(parseJSON);
@@ -274,7 +275,7 @@ export const API = {
     // Methods
     get: function() {
       const url = `${API.URL}/status`;
-      return fetch(API.API_AUTH.setSessionToken(url)).then(parseJSON);
+      return fetch(API.AUTH.setSessionToken(url)).then(parseJSON);
     }
   }
 };
