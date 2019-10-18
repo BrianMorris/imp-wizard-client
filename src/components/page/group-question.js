@@ -2,7 +2,8 @@ import React from "react";
 import Question from "../question";
 import { Grid, Segment, Loader, Dimmer } from "semantic-ui-react";
 import { navigate } from "@reach/router";
-import API from "../../service/api";
+import { API } from "../../service/api.js";
+import { errorHandler } from "../../service/errorHandler.js";
 
 class GroupQuestion extends React.Component {
   constructor(props) {
@@ -38,6 +39,7 @@ class GroupQuestion extends React.Component {
           error: error,
           isLoaded: true
         });
+        errorHandler(error);
       }
     );
   }
@@ -50,6 +52,7 @@ class GroupQuestion extends React.Component {
         this.setState({
           error: error
         });
+        errorHandler(error);
       }
     );
   }

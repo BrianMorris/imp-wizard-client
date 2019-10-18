@@ -2,7 +2,8 @@ import React from "react";
 import { Header, Segment, Dimmer, Loader } from "semantic-ui-react";
 import { navigate } from "@reach/router";
 import Group from "../group";
-import API from "../../service/api";
+import { API } from "../../service/api.js";
+import { errorHandler } from "../../service/errorHandler.js";
 
 class Home extends React.Component {
   constructor(props) {
@@ -27,6 +28,8 @@ class Home extends React.Component {
           isLoaded: true,
           error: error
         });
+
+        errorHandler(error);
       }
     );
 
@@ -55,6 +58,7 @@ class Home extends React.Component {
         this.setState({
           error: error
         });
+        errorHandler(error);
       }
     );
   }

@@ -1,25 +1,46 @@
+import Cookie from 'js-cookie';
+import { navigate } from '@reach/router';
+
 const parseJSON = function(response) {
+  if(response.status >= 400) {
+    throw new Error(response.status);
+  }
+
   return response.text().then(function(text) {
     return text ? JSON.parse(text) : null;
   });
 };
 
-const API = {
-  URL: "http://localhost:8000",
+export const API = {
+  URL: "https://ec2-54-67-52-72.us-west-1.compute.amazonaws.com",
+  AUTH: {
+    setSessionToken(url) {
+    // add session token
+    const session_token = Cookie.get('session_token');
+    if(!session_token) {
+      navigate('/login');
+    }
+    return url + '?session_token=' + session_token;
+    }
+  },
   Group: {
     getImplementationGroups: function(groupId) {
-      return fetch(`${API.URL}/implementationgroup${groupId ? "/" + groupId : ""}`).then(parseJSON);
+      const url = `${API.URL}/implementationgroup${groupId ? "/" + groupId : ""}`; 
+      return fetch(API.AUTH.setSessionToken(url)).then(parseJSON);
     },
     getNextQuestion: function(groupId) {
-      return fetch(`${API.URL}/group/${groupId}/nextquestion`).then(parseJSON);
+      const url = `${API.URL}/group/${groupId}/nextquestion`;
+      return fetch(API.AUTH.setSessionToken(url)).then(parseJSON);
     }
   },
   Question: {
     get: function(questionId) {
-      return fetch(`${API.URL}/question${questionId ? "/" + questionId : ""}`).then(parseJSON);
+      const url = `${API.URL}/question${questionId ? "/" + questionId : ""}`; 
+      return fetch(API.AUTH.setSessionToken(url)).then(parseJSON);
     },
     postAnswer: function(questionId, answerId) {
-      return fetch(`${API.URL}/question/${questionId}/answer`, {
+      const url = `${API.URL}/question/${questionId}/answer`;
+      return fetch(API.AUTH.setSessionToken(url), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -28,18 +49,22 @@ const API = {
       }).then(parseJSON);
     },
     resetAll: function() {
-      return fetch(`${API.URL}/question/reset`).then(parseJSON);
+      const url = `${API.URL}/question/reset`;
+      return fetch(API.AUTH.setSessionToken(url)).then(parseJSON);
     }
   },
   Import: {
     get: function(importId) {
-      return fetch(`${API.URL}/import${importId ? "/" + importId : ""}`).then(parseJSON);
+      const url = `${API.URL}/import${importId ? "/" + importId : ""}`;
+      return fetch(API.AUTH.setSessionToken(url)).then(parseJSON);
     },
     activeFields: function(importId) {
-      return fetch(`${API.URL}/import/${importId}/activefields`).then(parseJSON);
+      const url = `${API.URL}/import/${importId}/activefields`;
+      return fetch(API.AUTH.setSessionToken(url)).then(parseJSON);
     },
     downloadTemplate: function(importId) {
-      return fetch(`${API.URL}/import/${importId}/template`).then(parseJSON);
+      const url = `${API.URL}/import/${importId}/template`;
+      return fetch(API.AUTH.setSessionToken(url)).then(parseJSON);
     }
   
   },
@@ -73,4 +98,3 @@ const API = {
   }
 };
 
-export default API;

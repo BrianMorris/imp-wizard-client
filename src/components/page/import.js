@@ -2,7 +2,8 @@ import React from "react";
 import {Container, Header, Segment, Dimmer, Loader } from "semantic-ui-react";
 import { navigate } from "@reach/router";
 import ImportGroup from "../import-group";
-import API from "../../service/api";
+import { API } from "../../service/api.js";
+import { errorHandler } from "../../service/errorHandler.js";
 
 class Import extends React.Component {
   constructor(props) {
@@ -27,6 +28,8 @@ class Import extends React.Component {
           isLoaded: true,
           error: error
         });
+
+        errorHandler(error);
       }
     );
   }

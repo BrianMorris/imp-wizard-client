@@ -51,7 +51,6 @@ export class PrivateRoutes extends React.Component {
   }
 
   handleLogout = () => {
-    // hit api with logout
     this.toggleLogin(false);
     Cookie.remove('session_token');
     navigate('/login');

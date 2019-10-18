@@ -1,6 +1,7 @@
 import React from "react";
 import {Container, Header, List, Button, Segment} from "semantic-ui-react";
-import API from "../../service/api";
+import { API } from "../../service/api.js";
+import { errorHandler } from "../../service/errorHandler.js";
 
 class ImportFields extends React.Component {
   constructor(props) {
@@ -25,6 +26,8 @@ class ImportFields extends React.Component {
           isLoaded: true,
           error: error
         });
+
+        errorHandler(error);
       }
     );
   }

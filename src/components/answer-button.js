@@ -1,6 +1,7 @@
 import React from "react";
 import { Button, Popup, Dimmer, Loader } from "semantic-ui-react";
-import API from "../service/api";
+import { API } from "../service/api.js";
+import { errorHandler } from "../service/errorHandler.js";
 
 class AnswerButton extends React.Component {
   constructor(props) {
@@ -17,7 +18,7 @@ class AnswerButton extends React.Component {
         this.props.onAnswerSubmit(this.props.answer);
       },
       error => {
-        alert(error);
+        errorHandler(error);
       }
     );
   }

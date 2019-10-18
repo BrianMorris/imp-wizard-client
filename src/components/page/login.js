@@ -2,7 +2,8 @@ import React from "react";
 import Cookie from 'js-cookie';
 import { navigate } from "@reach/router";
 import { Grid, Header, Form, Segment, Button } from "semantic-ui-react";
-import API from '../../service/api';
+import { API } from "../../service/api.js";
+import { errorHandler } from "../../service/errorHandler.js";
 import UserContext from '../../userContext.js';
 
 export class Login extends React.Component {
@@ -38,6 +39,7 @@ export class Login extends React.Component {
       },
       error => {
         this.handleUnsuccessfulLogin('invalid login');
+        errorHandler(error);
       }
     )
   }

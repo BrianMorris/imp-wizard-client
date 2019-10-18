@@ -1,6 +1,6 @@
 import React from "react";
 import { Segment, Header, Icon, Popup } from "semantic-ui-react";
-import API from "../service/api";
+import { API } from "../service/api.js";
 
 class Group extends React.Component {
   constructor(props) {
