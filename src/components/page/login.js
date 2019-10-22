@@ -44,7 +44,6 @@ export class Login extends React.Component {
     )
   }
   handleUnsuccessfulLogin(error) {
-    console.log('login err', error);
     let errorArr = this.state.errors;
     errorArr.push(error);
     this.setState({

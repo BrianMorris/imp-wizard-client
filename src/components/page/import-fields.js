@@ -33,6 +33,8 @@ class ImportFields extends React.Component {
   }
 
   render() {
+    const downloadLink = API.Import.downloadTemplate(this.props.group_id);
+
     const importFields = this.state.fields ? this.state.fields.map((field, index) => {
       return (
         <List.Item key={index}>
@@ -49,13 +51,13 @@ class ImportFields extends React.Component {
     return ( 
       <React.Fragment>
         <Container>
-          <Header text-align>{this.importtype} import fields</Header>
+          <Header text-align="center">{this.importtype} import fields</Header>
           <Segment>
             <List divided relaxed bulleted>
               {importFields}
             </List>
           </Segment>
-          <Button primary as="a" href={`http://fbp.wizard/import/${this.props.group_id}/template`}>Download CSV</Button>
+          <Button primary as="a" href={downloadLink} >Download CSV</Button>
         </Container>
       </React.Fragment>
       );

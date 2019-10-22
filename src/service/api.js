@@ -12,6 +12,7 @@ const parseJSON = function(response) {
 };
 
 export const API = {
+  // URL: "http://localhost:8000",
   URL: "https://ec2-54-67-52-72.us-west-1.compute.amazonaws.com",
   AUTH: {
     setSessionToken(url) {
@@ -63,8 +64,9 @@ export const API = {
       return fetch(API.AUTH.setSessionToken(url)).then(parseJSON);
     },
     downloadTemplate: function(importId) {
+      // fetching download link to handle download through href button
       const url = `${API.URL}/import/${importId}/template`;
-      return fetch(API.AUTH.setSessionToken(url)).then(parseJSON);
+      return API.AUTH.setSessionToken(url);
     }
   
   },

@@ -1,8 +1,7 @@
 import React from "react";
-import { Header, Menu, Label } from "semantic-ui-react";
+import { Menu, Label } from "semantic-ui-react";
 import { navigate } from "@reach/router";
 import { API } from "../service/api.js";
-import { errorHandler } from "../service/errorHandler.js";
 import UserContext from '../userContext.js';
 
 class AppNav extends React.Component {
