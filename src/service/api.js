@@ -13,7 +13,7 @@ const parseJSON = function(response) {
 
 export const API = {
   // URL: "http://localhost:8000",
-  URL: "https://ec2-54-67-52-72.us-west-1.compute.amazonaws.com",
+  URL: "http://ec2-54-67-52-72.us-west-1.compute.amazonaws.com",
   AUTH: {
     setSessionToken(url) {
     // add session token
